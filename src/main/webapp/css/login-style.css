@@ -1,0 +1,205 @@
+/* --- 全局和重置 --- */
+body, html {
+    height: 100%; /* 保持，但后续 wrapper 的处理更重要 */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    line-height: 1.6;
+    background-color: #eef1f5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 移除 body, html 的 display: flex 和 align-items: center，交由 wrapper 处理 */
+}
+
+/* --- 主要包装器 --- */
+.login-wrapper {
+    width: 100%;
+    min-height: 100vh; /* 确保至少撑满整个视口高度 */
+    display: flex;
+    align-items: center;  /* 仍然尝试垂直居中，但如果内容过高，padding 会帮助 */
+    justify-content: center;
+    padding: 40px 20px; /* 增加上下的 padding，给顶部和底部留出空间 */
+    box-sizing: border-box;
+}
+
+/* --- 登录/注册容器 --- */
+.login-container { /* 通用样式 */
+    background-color: #ffffff;
+    padding: 30px 35px; /* 稍微调整内边距 */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    text-align: center;
+    margin: 20px 0; /* 如果内容高于视口，允许上下滚动时有边距 */
+}
+
+.login-container.register-container { /* 注册容器特定宽度 */
+    max-width: 600px; /* <<--- 大幅增加注册表单的宽度 */
+    padding: 35px 45px; /* 注册页可以有更多内边距 */
+}
+
+.login-container:not(.register-container) { /* 登录容器特定宽度 */
+    max-width: 450px; /* <<--- 登录表单的宽度可以保持或略增 */
+}
+
+
+/* --- 登录/注册头部 --- */
+.login-header {
+    margin-bottom: 25px; /* 调整与表单的间距 */
+}
+
+.login-header .logo-image {
+    max-width: 90px;
+    margin-bottom: 15px;
+}
+
+.login-header h2 {
+    color: #2c3e50;
+    font-size: 24px; /* 统一标题大小，或根据需要调整 */
+    margin-top: 0; /* 确保标题顶部没有额外边距 */
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.login-header p {
+    color: #7f8c8d;
+    font-size: 14px; /* 统一副标题大小 */
+    margin-top: 0;
+}
+
+/* ... (消息提示 .message, .error-message, .success-message 样式保持不变) ... */
+/* ... (表单组 .form-group, label, input 样式大致保持，可以微调 padding 和 font-size) ... */
+
+.form-group {
+    margin-bottom: 18px; /* 稍微减少表单项之间的间距，如果字段多的话 */
+    text-align: left;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 6px; /* 减少标签和输入框的间距 */
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-control-select { /* 将 select 也包含进来 */
+    width: 100%;
+    padding: 12px 15px; /* 统一输入框和下拉框的内边距 */
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #495057;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="email"]:focus,
+.form-control-select:focus { /* 将 select 也包含进来 */
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
+}
+
+/* ... (占位符样式 .form-group input::placeholder 保持不变) ... */
+
+/* ... (下拉框 .form-control-select 的箭头等样式保持不变，但确保 padding 与 input 一致) ... */
+.form-control-select {
+    /* padding: 12px 15px; 已经在上面统一设置 */
+    /* padding-right: 2.5rem; 如果有自定义箭头，确保这个值正确 */
+}
+
+
+/* --- 按钮 --- */
+.btn-login, /* 保持按钮的通用类名 */
+.btn-register { /* 注册按钮也使用这个基类 */
+    width: 100%;
+    padding: 12px 18px; /* 统一按钮内边距 */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 10px; /* 给按钮上方一点空间 */
+}
+
+.btn-login { /* 登录按钮特定样式 */
+    background-image: linear-gradient(to right, #007bff 0%, #0056b3 100%);
+    background-size: 200% auto;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+}
+.btn-login:hover {
+    background-position: right center;
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-register { /* 注册按钮特定样式 */
+    background-image: linear-gradient(to right, #28a745 0%, #218838 100%);
+    background-size: 200% auto;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+.btn-register:hover {
+    background-position: right center;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* --- 底部链接 --- */
+.register-link, /* 登录页的注册链接 */
+.login-link-alternative { /* 注册页的登录链接 */
+    margin-top: 25px; /* 调整与按钮的间距 */
+    font-size: 14px;
+    color: #555;
+}
+.register-link a,
+.login-link-alternative a {
+    color: #0069d9;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+.register-link a:hover,
+.login-link-alternative a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* --- 响应式调整 --- */
+@media (max-width: 640px) { /* 调整断点以适应新的 register-container max-width */
+    .login-wrapper {
+        padding: 20px 15px; /* 小屏幕上减少 wrapper 的 padding */
+        align-items: flex-start; /* 在非常小的屏幕或内容溢出时，从顶部开始对齐 */
+        overflow-y: auto; /* 如果内容溢出，允许垂直滚动 */
+    }
+    .login-container.register-container,
+    .login-container:not(.register-container) {
+        max-width: 100%; /* 在小屏幕上撑满可用宽度 */
+        margin-top: 20px; /* 确保顶部有边距 */
+        margin-bottom: 20px;
+        padding: 25px 20px; /* 调整内边距 */
+    }
+
+    .login-header h2 {
+        font-size: 20px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group input[type="email"],
+    .form-control-select,
+    .btn-login,
+    .btn-register {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}
