@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>垃圾分类小游戏</title> <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>垃圾分类挑战</h1>
+    <p>将垃圾拖拽到正确的分类桶中！</p>
+
+    <div id="score-board">
+        得分: <span id="score">0</span>
+    </div>
+
+    <div id="game-area">
+        <div id="garbage-items-container">
+            <h2>待分类垃圾 (共 <span id="item-count">0</span> 项):</h2> <div id="garbage-items">
+                </div>
+        </div>
+
+        <div id="bins-container">
+             <h2>垃圾桶:</h2>
+            <div id="bins">
+                <div class="bin" id="recyclable-bin" data-type="recyclable">
+                    <span class="bin-icon">♻️</span>
+                    <span class="bin-label">可回收物</span>
+                </div>
+                <div class="bin" id="kitchen-bin" data-type="kitchen">
+                    <span class="bin-icon">🍎</span>
+                    <span class="bin-label">厨余垃圾</span>
+                </div>
+                <div class="bin" id="hazardous-bin" data-type="hazardous">
+                    <span class="bin-icon">☠️</span>
+                    <span class="bin-label">有害垃圾</span>
+                </div>
+                 <div class="bin" id="other-bin" data-type="other">
+                    <span class="bin-icon">🗑️</span>
+                    <span class="bin-label">其他垃圾</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <button id="reset-button">重新开始</button>
+
+    <script src="garbage_data.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

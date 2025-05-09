@@ -1,0 +1,24 @@
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
+.header { background-color: #333; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+.header .logo a { color: white; text-decoration: none; font-size: 1.5em; font-weight: bold; }
+.header .user-nav a { color: white; margin-left: 15px; text-decoration: none; }
+.header .user-nav a:hover { text-decoration: underline; }
+
+.main-nav { background-color: #4CAF50; overflow: hidden; text-align: center; }
+.main-nav a { display: inline-block; color: white; padding: 14px 20px; text-decoration: none; font-size: 1em; }
+.main-nav a:hover { background-color: #45a049; }
+
+.container { max-width: 1200px; margin: 20px auto; padding: 20px; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+.welcome-banner { text-align: center; padding: 40px 20px; background-color: #e9e9e9; margin-bottom: 20px; border-radius: 5px;}
+.welcome-banner h1 { margin-top: 0; color: #333; }
+
+.content-section { margin-bottom: 30px; }
+.content-section h2 { border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-bottom: 20px; color: #333; }
+.content-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+.content-item { background-color: #f9f9f9; border: 1px solid #eee; border-radius: 4px; padding: 15px; width: calc(33.333% - 20px); /* 示例：三列布局 */ box-sizing: border-box; }
+.content-item h3 { margin-top: 0; }
+.content-item a { text-decoration: none; color: #007bff; }
+.content-item a:hover { text-decoration: underline; }
+
+
+.footer { text-align: center; padding: 20px; background-color: #333; color: white; margin-top: 30px; }

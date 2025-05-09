@@ -1,0 +1,194 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    color: #333;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h1, h2 {
+    color: #444;
+    text-align: center;
+}
+
+#score-board {
+    margin: 15px 0;
+    font-size: 1.3em;
+    font-weight: bold;
+    background-color: #fff;
+    padding: 10px 25px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#game-area {
+    display: flex;
+    flex-wrap: wrap; /* 在小屏幕上允许换行 */
+    justify-content: space-around;
+    width: 95%;
+    max-width: 1000px;
+    margin-top: 10px;
+    background-color: #e9e9e9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+#garbage-items-container, #bins-container {
+    width: 100%; /* 在小屏幕上占满宽度 */
+    margin-bottom: 20px; /* 分开两个区域 */
+}
+
+@media (min-width: 768px) { /* 在较大屏幕上并排显示 */
+    #garbage-items-container {
+        width: 35%;
+        margin-bottom: 0;
+    }
+    #bins-container {
+        width: 60%;
+         margin-bottom: 0;
+    }
+}
+
+
+#garbage-items {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 250px;
+    max-height: 400px; /* 限制最大高度并允许滚动 */
+    overflow-y: auto; /* 内容超出时显示滚动条 */
+    border: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap; /* 让垃圾项可以换行 */
+    justify-content: center; /* 居中垃圾项 */
+    align-content: flex-start; /* 从顶部开始排列 */
+    gap: 10px; /* 垃圾项之间的间隙 */
+}
+
+
+.garbage-item {
+    background-color: #f0f0f0;
+    color: #555;
+    padding: 8px 12px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 圆角更明显 */
+    cursor: grab;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.garbage-item:hover {
+    transform: scale(1.05); /* 鼠标悬停时放大一点 */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+}
+
+.garbage-item:active {
+    cursor: grabbing;
+    opacity: 0.7;
+    transform: scale(0.95); /* 拖动时缩小一点 */
+}
+
+#bins {
+    display: grid; /* 使用网格布局 */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* 响应式网格 */
+    gap: 15px; /* 网格间隙 */
+    padding: 10px;
+}
+
+.bin {
+    border: 3px dashed #aaa;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column; /* 图标和文字垂直排列 */
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff; /* 默认白色背景 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.bin-icon {
+    font-size: 2.5em; /* 图标放大 */
+    margin-bottom: 10px;
+    pointer-events: none; /* 防止图标干扰拖放事件 */
+}
+
+.bin-label {
+    font-weight: bold;
+    color: #555;
+    pointer-events: none;
+}
+
+/* 不同垃圾桶的颜色 */
+#recyclable-bin { border-color: #007bff; }
+#kitchen-bin { border-color: #28a745; }
+#hazardous-bin { border-color: #dc3545; }
+#other-bin { border-color: #6c757d; }
+
+/* 悬停在垃圾桶上方的样式 */
+.bin.drag-over {
+    transform: scale(1.03); /* 悬停时放大 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+#recyclable-bin.drag-over { background-color: #cce5ff; }
+#kitchen-bin.drag-over { background-color: #d4edda; }
+#hazardous-bin.drag-over { background-color: #f8d7da; }
+#other-bin.drag-over { background-color: #e2e3e5; }
+
+
+/* 正确/错误反馈样式 */
+.bin.correct {
+    animation: pulse-green 0.5s ease;
+}
+.bin.incorrect {
+    animation: pulse-red 0.5s ease;
+}
+
+@keyframes pulse-green {
+    0% { background-color: #28a745; border-color: #1c7430; transform: scale(1.05); }
+    50% { background-color: #a7d7a7; border-color: #1c7430; transform: scale(1.1); }
+    100% { background-color: #fff; border-color: #28a745; transform: scale(1); }
+}
+
+@keyframes pulse-red {
+    0% { background-color: #dc3545; border-color: #a71d2a; transform: scale(1.05); }
+    50% { background-color: #f5c6cb; border-color: #a71d2a; transform: scale(1.1); }
+    100% { background-color: #fff; border-color: #dc3545; transform: scale(1); }
+}
+
+
+#reset-button {
+    margin-top: 20px;
+    margin-bottom: 30px; /* 底部留白 */
+    padding: 12px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+#reset-button:hover {
+    background-color: #0056b3;
+}
+#reset-button:active {
+    transform: scale(0.98);
+}
+
+/* 拖动中的元素样式 */
+.dragging {
+    opacity: 0.4;
+    border-style: dashed;
+}
