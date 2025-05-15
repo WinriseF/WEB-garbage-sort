@@ -80,7 +80,7 @@
             <div class="content-item">
                 <h3>趣味分类小游戏</h3>
                 <p>通过游戏轻松学习垃圾分类！</p>
-                <a href="${pageContext.request.contextPath}/games/game.html">开始游戏 »</a>
+                <a href="${pageContext.request.contextPath}/games/game.jsp">开始游戏 »</a>
             </div>
         </div>
     </section>

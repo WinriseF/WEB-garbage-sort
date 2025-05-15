@@ -4,18 +4,20 @@ const scoreElement = document.getElementById('score');
 const resetButton = document.getElementById('reset-button');
 const itemCountElement = document.getElementById('item-count'); // 获取显示数量的元素
 
+const currentUserId = document.body.dataset.userId || null;
+const currentGameId = 1;
+
 let score = 0;
 let draggedItem = null;
 const ITEMS_PER_GAME = 20; // 定义每局游戏的垃圾数量
+let gameStartTime = null;
 
-// --- Helper: Fisher-Yates (Knuth) Shuffle ---
-// (It's good practice to have this as a reusable function)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
     }
-    return array; // Return the shuffled array (optional, modifies in place)
+    return array;
 }
 
 
@@ -24,12 +26,16 @@ function initializeGame() {
     score = 0;
     updateScore();
     clearGarbageItems();
-    populateGarbageItems(); // Will now select based on difficulty ratio
-    // 清除垃圾桶可能残留的反馈样式
+    populateGarbageItems();
     bins.forEach(bin => {
         bin.classList.remove('correct', 'incorrect', 'drag-over');
         bin.removeEventListener('animationend', removeAnimationClass);
     });
+    gameStartTime = new Date();
+    const gameEndMessageElement = document.getElementById('game-end-message');
+    if (gameEndMessageElement) {
+        gameEndMessageElement.style.display = 'none';
+    }
 }
 
 function clearGarbageItems() {
@@ -127,8 +133,6 @@ function dragEnd(event) {
 }
 
 
-// --- 放置区事件处理 (dragOver, dragLeave) ---
-// (保持不变)
 bins.forEach(bin => {
     bin.addEventListener('dragover', dragOver);
     bin.addEventListener('dragleave', dragLeave);
@@ -206,25 +210,92 @@ function removeAnimationClass(event) {
      }
 }
 
+
+// --- 游戏结束逻辑修改 ---
 function checkGameCompletion() {
     const remainingItems = garbageItemsContainer.querySelectorAll('.garbage-item').length;
     if (remainingItems === 0) {
-        setTimeout(() => {
-            let message = `最终得分: ${score}. `;
-            if (score < ITEMS_PER_GAME * 0.5) { // 例如，得分低于一半
-                message += "还有提升空间哦！";
-            } else if (score < ITEMS_PER_GAME * 0.8) { // 得分中等
-                 message += "表现不错！";
-            } else { // 得分较高
-                 message += "太棒了，垃圾人！";
-            }
-             alert(message);
-        }, 300);
+        const gameEndTime = new Date();
+        const durationSeconds = Math.round((gameEndTime - gameStartTime) / 1000);
+
+        let message = `最终得分: ${score}. 用时: ${durationSeconds} 秒. `;
+        if (score < ITEMS_PER_GAME * 0.5) {
+            message += "还有提升空间哦！";
+        } else if (score < ITEMS_PER_GAME * 0.8) {
+            message += "表现不错！";
+        } else {
+            message += "太棒了，垃圾人！";
+        }
+
+        // 显示游戏结束消息
+        const gameEndMessageElement = document.getElementById('game-end-message'); // 假设HTML中有一个元素显示此消息
+        if (gameEndMessageElement) {
+            gameEndMessageElement.textContent = message;
+            gameEndMessageElement.style.display = 'block';
+        } else {
+            alert(message); // 后备方案
+        }
+
+
+        // --- 将分数发送到后端 ---
+        if (currentUserId && currentGameId) { // 确保用户已登录且游戏ID已知
+            console.log(`准备发送分数: userId=${currentUserId}, gameId=${currentGameId}, score=${score}, duration=${durationSeconds}`);
+            saveScoreToBackend(currentUserId, currentGameId, score, durationSeconds);
+        } else {
+            if (!currentUserId) console.warn("用户未登录，分数将不会被保存。");
+            if (!currentGameId) console.warn("游戏ID未知，分数将不会被保存。");
+        }
     }
 }
+
+async function saveScoreToBackend(userId, gameId, finalScore, duration) {
+    const data = {
+        // userId: userId, // userId 将从后端session获取，避免前端篡改
+        gameId: gameId,
+        score: finalScore,
+        durationSeconds: duration
+    };
+
+    try {
+        // 注意: URL 需要根据你的 Servlet 映射来调整
+        const response = await fetch('../saveGameScore', { // <<--- 假设 Servlet 映射到 /saveGameScore, 且游戏页面在子目录
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const result = await response.json(); // 或 response.text() 如果后端只返回文本
+            console.log('分数保存成功:', result);
+            // 可选：在页面上显示保存成功的消息
+            // 例如，在 gameEndMessageElement 旁边添加一个小的提示
+        } else {
+            console.error('分数保存失败:', response.status, await response.text());
+            // 可选：在页面上显示保存失败的消息
+        }
+    } catch (error) {
+        console.error('发送分数时发生网络错误:', error);
+        // 可选：在页面上显示网络错误消息
+    }
+}
+
 
 // --- 事件监听器 ---
 resetButton.addEventListener('click', initializeGame);
 
 // --- 游戏启动 ---
-document.addEventListener('DOMContentLoaded', initializeGame);
+document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('game-end-message')) {
+        const messageDiv = document.createElement('div');
+        messageDiv.id = 'game-end-message';
+        messageDiv.style.display = 'none'; // 默认隐藏
+        messageDiv.style.marginTop = '20px';
+        messageDiv.style.padding = '10px';
+        messageDiv.style.border = '1px solid #ccc';
+        messageDiv.style.backgroundColor = '#f9f9f9';
+        resetButton.parentNode.insertBefore(messageDiv, resetButton);
+    }
+    initializeGame();
+});
