@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>垃圾分类小游戏 - 智能垃圾分类教育平台</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/games/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gamestyle.css">
 
 </head>
 

@@ -9,7 +9,6 @@ body {
     margin: 0;
 }
 
-/* ... (h1, h2, p, #score-board 保持不变) ... */
 h1, h2, p {
     color: #444;
     text-align: center;
@@ -26,58 +25,48 @@ h1, h2, p {
 }
 
 
-/* --- MODIFIED --- */
 #game-area {
-    display: flex; /* <<<<<< KEY: Enable flexbox for side-by-side layout */
-    /* flex-wrap: wrap; /* REMOVE or comment out if you don't want it to wrap on small screens for the main columns */
-    justify-content: space-between; /* Or space-around, or use gap */
+    display: flex;
+    justify-content: space-between;
     width: 95%;
-    max-width: 1000px; /* Or adjust as needed */
+    max-width: 1000px;
     margin-top: 10px;
     background-color: #e9e9e9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-    gap: 20px; /* Adds space between the left and right containers */
+    gap: 20px;
 }
 
-/* --- MODIFIED --- */
 #garbage-items-container {
-    flex: 1; /* Allow it to take up available space, adjust ratio with bins-container if needed */
-    /* width: 35%; /* Replaced by flex property */
-    display: flex; /* To help manage its children, particularly for height */
-    flex-direction: column; /* Stack title and items vertically */
-    min-width: 280px; /* Keep or adjust */
-    /* margin-bottom: 0; /* Already handled by gap on #game-area or not needed */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
 }
 
-/* --- MODIFIED --- */
 #bins-container {
-    flex: 1.5; /* Make bins container slightly wider, adjust ratio as needed */
-    /* width: 60%; /* Replaced by flex property */
-    display: flex; /* To help manage its children */
-    flex-direction: column; /* Stack title and bins vertically */
-    min-width: 300px; /* Keep or adjust */
-    /* margin-bottom: 0; */
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
 }
 
-/* REMOVE or MODIFY the media query that was previously setting widths for these two containers */
-/* @media (min-width: 768px) { ... } */
 
 #garbage-items {
     background-color: #fff;
     padding: 15px;
     border-radius: 8px;
-    min-height: 300px; /* Adjust height as desired, maybe match bins height */
+    min-height: 300px;
     max-height: 450px; /* 限制最大高度并允许滚动 */
-    overflow-y: auto; /* 内容超出时显示滚动条 */
+    overflow-y: auto;
     border: 1px solid #ccc;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: flex-start;
     gap: 10px;
-    flex-grow: 1; /* Allow it to grow to fill #garbage-items-container */
+    flex-grow: 1;
 }
 
 
@@ -85,7 +74,6 @@ h1, h2, p {
     background-color: #f0f0f0;
     color: #555;
     padding: 8px 12px;
-    /* margin: 5px; /* Replaced by gap on parent */
     border: 1px solid #ccc;
     border-radius: 15px;
     cursor: grab;
@@ -106,20 +94,18 @@ h1, h2, p {
     transform: scale(0.95);
 }
 
-/* --- MODIFIED --- */
 #bins {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* <<<<<< KEY: Force 2 columns */
-    grid-template-rows: repeat(2, 1fr);    /* <<<<<< KEY: Force 2 rows, making them equal height */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 15px;
     padding: 10px;
-    flex-grow: 1; /* Allow it to grow to fill #bins-container */
-    min-height: 300px; /* Example, ensure bins area has enough height */
+    flex-grow: 1;
+    min-height: 300px;
 }
 
 .bin {
     border: 3px dashed #aaa;
-    /* min-height: 130px; /* Height will now be controlled by grid-template-rows: 1fr */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -133,8 +119,8 @@ h1, h2, p {
 }
 
 .bin-icon {
-    font-size: 2.2em; /* Slightly adjust if needed for new bin size */
-    margin-bottom: 8px; /* Adjust spacing */
+    font-size: 2.2em;
+    margin-bottom: 8px;
     pointer-events: none;
 }
 
@@ -142,12 +128,10 @@ h1, h2, p {
     font-weight: bold;
     color: #555;
     pointer-events: none;
-    font-size: 0.9em; /* Slightly adjust if needed */
+    font-size: 0.9em;
 }
 
-/* ... (rest of the bin styles, animations, buttons etc. can remain largely the same) ... */
-
-/* Different垃圾桶的颜色 */
+/* 不同垃圾桶的颜色 */
 #recyclable-bin { border-color: #007bff; }
 #kitchen-bin { border-color: #28a745; }
 #hazardous-bin { border-color: #dc3545; }
@@ -224,30 +208,26 @@ h1, h2, p {
     background-color: #5a6268;
 }
 
-/* --- OPTIONAL: Responsive adjustments for smaller screens --- */
 @media (max-width: 768px) {
     #game-area {
-        flex-direction: column; /* Stack items vertically on small screens */
-        align-items: stretch; /* Make children take full width */
+        flex-direction: column;
+        align-items: stretch;
     }
 
     #garbage-items-container,
     #bins-container {
-        flex-basis: auto; /* Reset flex basis */
-        width: 100%;    /* Take full width */
+        flex-basis: auto;
+        width: 100%;
     }
 
     #bins {
-        /* You might want to change the grid on small screens, e.g., back to auto-fit or 2x2 if space allows */
-        /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
-        /* Or keep 2x2 if it looks okay */
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, minmax(100px, auto)); /* Ensure minimum height for bins */
-        min-height: 250px; /* Adjust min-height for bins area on small screens */
+        grid-template-rows: repeat(2, minmax(100px, auto));
+        min-height: 250px;
     }
 
     #garbage-items {
-        min-height: 200px; /* Adjust for smaller screens */
+        min-height: 200px;
         max-height: 300px;
     }
 }

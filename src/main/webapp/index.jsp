@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智能垃圾分类教育平台 - 首页</title>
-    <%-- 引入 CSS 文件 --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -22,9 +21,6 @@
         <c:choose>
             <c:when test="${not empty sessionScope.loggedInUser}">
                 <span>欢迎, <c:out value="${sessionScope.loggedInUser.nickname != null ? sessionScope.loggedInUser.nickname : sessionScope.loggedInUser.username}"/>!</span>
-                <%-- 可选：我的账户链接
-                <a href="${pageContext.request.contextPath}/user/profile">我的账户</a>
-                --%>
                 <a href="${pageContext.request.contextPath}/logout">注销</a>
             </c:when>
             <c:otherwise>
@@ -39,7 +35,7 @@
 <nav class="main-nav">
     <a href="${pageContext.request.contextPath}/videos">教育视频</a>
     <a href="${pageContext.request.contextPath}/articles">知识学习</a>
-    <a href="${pageContext.request.contextPath}/games">分类游戏</a>
+    <a href="${pageContext.request.contextPath}/games/game.jsp">分类游戏</a>
     <a href="${pageContext.request.contextPath}/reports/new">随手拍</a> <%-- 假设 /reports/new 是提交举报的入口 --%>
     <a href="${pageContext.request.contextPath}/recycling">旧物回收</a>
 
@@ -94,8 +90,5 @@
     <p>© <fmt:formatDate value="<%=new java.util.Date()%>" pattern="yyyy"/> 智能垃圾分类教育平台. 保留所有权利.</p>
     <%-- <p><a href="#">关于我们</a> | <a href="#">联系方式</a> | <a href="#">隐私政策</a></p> --%>
 </footer>
-
-<%-- 引入 JS 文件 (如果需要) --%>
-<%-- <script src="${pageContext.request.contextPath}/js/main.js"></script> --%>
 </body>
 </html>

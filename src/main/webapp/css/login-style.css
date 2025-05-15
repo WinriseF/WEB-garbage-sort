@@ -7,7 +7,6 @@ body, html {
     background-color: #eef1f5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* 移除 body, html 的 display: flex 和 align-items: center，交由 wrapper 处理 */
 }
 
 /* --- 主要包装器 --- */
@@ -33,12 +32,12 @@ body, html {
 }
 
 .login-container.register-container { /* 注册容器特定宽度 */
-    max-width: 600px; /* <<--- 大幅增加注册表单的宽度 */
+    max-width: 600px; /* <<--- 增加注册表单的宽度 */
     padding: 35px 45px; /* 注册页可以有更多内边距 */
 }
 
 .login-container:not(.register-container) { /* 登录容器特定宽度 */
-    max-width: 450px; /* <<--- 登录表单的宽度可以保持或略增 */
+    max-width: 450px;
 }
 
 
@@ -48,7 +47,8 @@ body, html {
 }
 
 .login-header .logo-image {
-    max-width: 90px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 15px;
 }
 
@@ -66,7 +66,50 @@ body, html {
     margin-top: 0;
 }
 
-/* ... (消息提示 .message, .error-message, .success-message 样式保持不变) ... */
+/* --- 消息提示 --- */
+.message {
+    padding: 12px 18px; /* Increased padding for better readability */
+    margin-bottom: 20px; /* Consistent margin */
+    border-radius: 6px;  /* Consistent with other form elements */
+    font-size: 0.9em;
+    border: 1px solid transparent; /* Base border, color will be overridden */
+    text-align: left; /* Messages are often better left-aligned for readability */
+    line-height: 1.5; /* Improved line spacing within the message */
+}
+
+/* Remove default margin from <p> tags inside .message for cleaner look */
+.message p {
+    margin: 0;
+    padding: 0;
+}
+
+/* 错误消息样式 */
+.message.error-message { /* Targets <div class="message error-message"> */
+    background-color: #f8d7da; /* Bootstrap danger background */
+    border-color: #f5c6cb;     /* Bootstrap danger border */
+    color: #c0392b;            /* Bootstrap danger text */
+}
+
+/* 成功消息样式 */
+.message.success-message { /* Targets <div class="message success-message"> */
+    background-color: #d4edda; /* Bootstrap success background */
+    border-color: #c3e6cb;     /* Bootstrap success border */
+    color: #27ae60;            /* Bootstrap success text */
+}
+
+/* Optional: Warning Message Style (if you plan to use it) */
+.message.warning-message {
+    background-color: #fff3cd; /* Bootstrap warning background */
+    border-color: #ffeeba;     /* Bootstrap warning border */
+    color: #856404;            /* Bootstrap warning text */
+}
+
+/* Optional: Info Message Style (if you plan to use it) */
+.message.info-message {
+    background-color: #d1ecf1; /* Bootstrap info background */
+    border-color: #bee5eb;     /* Bootstrap info border */
+    color: #0c5460;            /* Bootstrap info text */
+}
 /* ... (表单组 .form-group, label, input 样式大致保持，可以微调 padding 和 font-size) ... */
 
 .form-group {
