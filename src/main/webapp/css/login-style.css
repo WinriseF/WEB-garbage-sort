@@ -246,3 +246,29 @@ body, html {
         padding: 10px 12px;
     }
 }
+
+
+
+/* 新增：专门用于验证码输入框和图片的行容器 */
+.captcha-row {
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中对齐输入框和图片 */
+    width: 100%; /* 让这一行也尝试占据父容器的全部宽度 */
+}
+
+/* 针对验证码的文本输入框 */
+.captcha-row input[type="text"] {
+    flex-grow: 1; /* 让输入框占据剩余的可用空间 */
+    margin-right: 10px; /* 输入框和图片之间的间距 */
+    /* 宽度由flex-grow决定，所以不需要再设置width: 100% */
+    /* 其他样式如 padding, border, height, border-radius 会从上面的通用input规则继承 */
+}
+
+/* 针对验证码图片 */
+.captcha-row img {
+    height: 40px; /* 与输入框高度一致 */
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 4px;
+    flex-shrink: 0; /* 防止图片在空间不足时被压缩变形 */
+}

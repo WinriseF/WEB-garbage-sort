@@ -1,4 +1,4 @@
-package com.javaweb.controller; // 替换为你的包名
+package com.javaweb.controller;
 
 import com.javaweb.dao.UserDAO;
 import com.javaweb.model.User;
@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.removeAttribute("errorMessage"); // 清除之前的错误信息
         request.getRequestDispatcher("/user/register.jsp").forward(request, response);
     }
 
@@ -37,10 +39,32 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String nickname = request.getParameter("nickname");
         String ageGroup = request.getParameter("ageGroup");
+        String userCaptchaInput = request.getParameter("captcha");
+
+        HttpSession session = request.getSession(); // 获取或创建会话
+        String storedCaptchaAnswer = (String) session.getAttribute("captchaAnswer");
+
+        if (storedCaptchaAnswer != null) {
+            session.removeAttribute("captchaAnswer");
+        }
+
 
         String errorMessage = null;
-
-        // 1. 基本校验
+        //验证码校验
+        if (userCaptchaInput == null || userCaptchaInput.trim().isEmpty()) {
+            errorMessage = "请输入验证码！";
+        } else if (storedCaptchaAnswer == null) {
+            errorMessage = "验证码已失效，请刷新页面重试！";
+        } else if (!userCaptchaInput.trim().equals(storedCaptchaAnswer)) {
+            errorMessage = "验证码错误！";
+        }
+        if (errorMessage != null) {
+            request.setAttribute("errorMessage", errorMessage);
+            setFormAttributes(request, username, email, nickname, ageGroup);
+            request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+            return;
+        }
+        //基本校验
         if (username == null || username.trim().isEmpty() ||
                 password == null || password.isEmpty() ||
                 confirmPassword == null || confirmPassword.isEmpty()) {
@@ -52,21 +76,19 @@ public class RegisterServlet extends HttpServlet {
         } else if (password.length() < 6) {
             errorMessage = "密码长度至少需要6位！";
         } else {
-            // 2. 检查用户名和邮箱是否已存在
+            //检查用户名和邮箱是否已存在
             if (userDAO.isUsernameExists(username)) {
                 errorMessage = "用户名 '" + username + "' 已被注册！";
             } else if (email != null && !email.trim().isEmpty() && userDAO.isEmailExists(email)) {
-                // 只有当邮箱非空时才检查其唯一性
                 errorMessage = "邮箱 '" + email + "' 已被注册！";
             }
         }
 
         if (errorMessage != null) {
             request.setAttribute("errorMessage", errorMessage);
-            // 保留用户输入，以便回填表单 (除了密码)
+            setFormAttributes(request, username, email, nickname, ageGroup);
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
         } else {
-            // 3. 创建 User 对象并进行注册
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             User newUser = new User();
             newUser.setUsername(username);
@@ -87,5 +109,11 @@ public class RegisterServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/register.jsp").forward(request, response);
             }
         }
+    }
+    private void setFormAttributes(HttpServletRequest request, String username, String email, String nickname, String ageGroup) {
+        request.setAttribute("username", username);
+        request.setAttribute("email", email);
+        request.setAttribute("nickname", nickname);
+        request.setAttribute("ageGroup", ageGroup);
     }
 }

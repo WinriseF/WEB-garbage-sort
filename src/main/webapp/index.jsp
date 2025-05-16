@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <%-- 如果需要格式化日期等 --%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -36,7 +36,7 @@
     <a href="${pageContext.request.contextPath}/videos">教育视频</a>
     <a href="${pageContext.request.contextPath}/articles">知识学习</a>
     <a href="${pageContext.request.contextPath}/games/game.jsp">分类游戏</a>
-    <a href="${pageContext.request.contextPath}/reports/new">随手拍</a> <%-- 假设 /reports/new 是提交举报的入口 --%>
+    <a href="${pageContext.request.contextPath}/reports/new">随手拍</a>
     <a href="${pageContext.request.contextPath}/recycling">旧物回收</a>
 
     <%-- 管理员和编辑的特定导航 --%>
@@ -81,14 +81,11 @@
         </div>
     </section>
 
-    <%-- 可以根据需要添加更多区域，例如平台动态等 --%>
-
 </div>
 
 <%-- 页脚 --%>
 <footer class="footer">
     <p>© <fmt:formatDate value="<%=new java.util.Date()%>" pattern="yyyy"/> 智能垃圾分类教育平台. 保留所有权利.</p>
-    <%-- <p><a href="#">关于我们</a> | <a href="#">联系方式</a> | <a href="#">隐私政策</a></p> --%>
 </footer>
 </body>
 </html>
