@@ -20,8 +20,22 @@
     <nav class="user-nav">
         <c:choose>
             <c:when test="${not empty sessionScope.loggedInUser}">
-                <span>欢迎, <c:out value="${sessionScope.loggedInUser.nickname != null ? sessionScope.loggedInUser.nickname : sessionScope.loggedInUser.username}"/>!</span>
-                <a href="${pageContext.request.contextPath}/logout">注销</a>
+                <div class="user-info">
+                    <a href="${pageContext.request.contextPath}/user/profile.jsp"> <%-- 链接到用户个人资料页 --%>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.loggedInUser.currentAvatarPath}">
+                                <img src="${pageContext.request.contextPath}/${sessionScope.loggedInUser.currentAvatarPath}" alt="用户头像" class="user-avatar">
+                            </c:when>
+                            <c:otherwise>
+                                <%-- 如果用户没有头像，显示一个默认头像 --%>
+                                <%-- 请确保在 webapp/images/ 目录下有一个 default_avatar.png 文件 --%>
+                                <img src="${pageContext.request.contextPath}/images/logo.png" alt="默认头像" class="user-avatar">
+                            </c:otherwise>
+                        </c:choose>
+                        <span class="user-info-text">欢迎, <c:out value="${sessionScope.loggedInUser.nickname != null ? sessionScope.loggedInUser.nickname : sessionScope.loggedInUser.username}"/>!</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/logout">注销</a> <%-- 注销链接可以放在 user-info div 外部或内部，取决于你的布局偏好 --%>
+                </div>
             </c:when>
             <c:otherwise>
                 <a href="${pageContext.request.contextPath}/login">登录</a>

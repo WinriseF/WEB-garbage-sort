@@ -176,9 +176,6 @@ public class RegisterServlet extends HttpServlet {
             // 新增: 如果头像上传成功，将其相对路径设置到 newUser 对象中
             if (avatarRelativePath != null) {
                 newUser.setCurrentAvatarPath(avatarRelativePath); // 假设 User 模型类有 setCurrentAvatarPath 方法
-            } else {
-                // 可选: 如果用户未上传头像，可以设置一个默认头像的路径
-                // newUser.setCurrentAvatarPath("images/default_avatar.png"); // 例如
             }
 
             // 修改: 调用 addUser 方法，并期望它返回新用户的 user_id
