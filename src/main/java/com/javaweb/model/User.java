@@ -137,4 +137,11 @@ public class User {
                 ", registrationDate=" + registrationDate +
                 '}';
     }
+    public static class HistoricalAvatarPaths {
+        private String avatar1, avatar2, avatar3;
+        public HistoricalAvatarPaths(String a1, String a2, String a3) { avatar1=a1; avatar2=a2; avatar3=a3; }
+        public String getAvatar1() { return avatar1; }
+        public String getAvatar2() { return avatar2; }
+        public String getAvatar3() { return avatar3; }
+    }
 }

@@ -142,4 +142,55 @@ public class UserDAO {
             return false;
         }
     }
+
+    public User.HistoricalAvatarPaths getHistoricalAvatars(int userId) {
+        String sql = "SELECT avatar1_path, avatar2_path, avatar3_path FROM user_historical_avatars WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User.HistoricalAvatarPaths(
+                            rs.getString("avatar1_path"),
+                            rs.getString("avatar2_path"),
+                            rs.getString("avatar3_path")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 或者返回一个包含null路径的HistoricalAvatarPaths对象
+    }
+
+    public boolean updateCurrentUserAvatar(int userId, String newAvatarPath) {
+        String sql = "UPDATE Users SET current_avatar_path = ? WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newAvatarPath);
+            pstmt.setInt(2, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateHistoricalAvatars(int userId, String newHist1, String newHist2, String newHist3) {
+        // 因为 initializeHistoricalAvatars 应该已经创建了记录，所以这里总是 UPDATE
+        String sql = "UPDATE user_historical_avatars SET avatar1_path = ?, avatar2_path = ?, avatar3_path = ? WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newHist1);
+            pstmt.setString(2, newHist2);
+            pstmt.setString(3, newHist3);
+            pstmt.setInt(4, userId);
+            int affectedRows = pstmt.executeUpdate();
+            // 如果 initializeHistoricalAvatars 可能没执行或失败，这里可以加一个判断
+            // if (affectedRows == 0) { /*尝试 INSERT a new record*/ }
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

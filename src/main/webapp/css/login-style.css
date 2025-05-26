@@ -289,3 +289,52 @@ body, html {
     border: 1px solid #ddd;
     display: none; /* 初始隐藏 */
 }
+/* 新增: 裁剪模态框的基本样式 (你可以根据需要美化) */
+.cropper-modal-container {
+    display: none;       /* (关键) 初始状态设置为隐藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+    /* display: flex;  <-- 将这一行从CSS中移除或注释掉，因为JS会控制它 */
+    /* 当JS需要显示它时，会通过 style.display = 'flex' 来设置下面的对齐属性才会生效 */
+    align-items: center; /* 这些对齐属性在 display:flex 时生效 */
+    justify-content: center;
+}
+.cropper-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 90vw; /* 最大宽度为视口宽度的90% */
+    max-height: 80vh; /* 最大高度为视口高度的80% */
+    overflow: hidden; /* 确保内容在内部 */
+    display: flex;
+    flex-direction: column;
+}
+.cropper-image-container {
+    max-width: 500px; /* 限制图片容器的最大宽度 */
+    max-height: 400px; /* 限制图片容器的最大高度 */
+    overflow: hidden; /* 必须有，否则cropperjs的图片会溢出 */
+    margin-bottom: 15px;
+}
+.cropper-image-container img { /* cropperjs会操作这个img */
+    display: block;
+    max-width: 100%; /* 图片初始加载时适应容器 */
+}
+.cropper-buttons button {
+    margin: 5px;
+    padding: 8px 15px;
+}
+/* 简单的头像预览区 (可选) */
+#avatarPreviewCropped {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    object-fit: cover;
+    margin-top: 10px;
+    display: none; /* 初始隐藏 */
+}
