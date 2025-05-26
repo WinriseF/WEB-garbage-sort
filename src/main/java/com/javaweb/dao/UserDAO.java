@@ -2,7 +2,6 @@ package com.javaweb.dao;
 
 import com.javaweb.model.User;
 import com.javaweb.util.DBUtil;
-import org.mindrot.jbcrypt.BCrypt; // 引入 JBCrypt
 
 import java.sql.*;
 
@@ -10,7 +9,7 @@ public class UserDAO {
 
     // 检查用户名是否存在
     public boolean isUsernameExists(String username) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?"; // 假设表名是 Users
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -27,12 +26,10 @@ public class UserDAO {
 
     // 检查邮箱是否存在
     public boolean isEmailExists(String email) {
-        // 注意：数据库中 email 字段允许为 NULL，但如果它有 UNIQUE 约束，查询时需要考虑
-        // 如果 email 不是 NOT NULL 且 UNIQUE，此方法可能需要调整
         if (email == null || email.trim().isEmpty()) {
-            return false; // 如果允许邮箱为空，则空邮箱不视为“存在”
+            return false;
         }
-        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?";
+        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?"; // 假设表名是 Users
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
@@ -48,11 +45,13 @@ public class UserDAO {
     }
 
     // 添加用户 (注册)
-    public boolean addUser(User user) {
-        // 在调用此方法前，应已校验用户名和邮箱的唯一性
-        String sql = "INSERT INTO Users (username, password_hash, email, nickname, age_group, role, registration_date, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public int addUser(User user) {
+        // 在调用此方法前，应已校验用户名和邮箱的唯一
+        String sql = "INSERT INTO Users (username, password_hash, email, nickname, age_group, role, registration_date, is_active, current_avatar_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        int generatedUserId = 0;
+
         try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPasswordHash()); // 密码应已哈希
@@ -62,19 +61,27 @@ public class UserDAO {
             pstmt.setString(6, user.getRole() != null ? user.getRole() : "user"); // 默认角色
             pstmt.setTimestamp(7, user.getRegistrationDate() != null ? user.getRegistrationDate() : new Timestamp(System.currentTimeMillis()));
             pstmt.setBoolean(8, user.isActive());
-            // region_id 可以是 null，所以不在此处设置，除非 user 对象中有值
+            pstmt.setString(9, user.getCurrentAvatarPath()); // 获取在 User 对象中设置的头像路径
 
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
 
+            if (rowsAffected > 0) {
+                // --- 获取数据库生成的 user_id ---
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedUserId = rs.getInt(1);
+                    }
+                }
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // 实际项目中应使用日志
         }
-        return false;
+        // --- 返回获取到的 user_id (如果失败则为0) ---
+        return generatedUserId;
     }
 
-    // 根据用户名获取用户 (登录时使用)
     public User getUserByUsername(String username) {
+        // --- SQL SELECT 语句中加入 current_avatar_path 字段 ---
         String sql = "SELECT * FROM Users WHERE username = ?";
         User user = null;
         try (Connection conn = DBUtil.getConnection();
@@ -89,7 +96,6 @@ public class UserDAO {
                     user.setEmail(rs.getString("email"));
                     user.setNickname(rs.getString("nickname"));
                     user.setAgeGroup(rs.getString("age_group"));
-                    // 注意：rs.getInt() 对于数据库中 NULL 的整型会返回 0，如果想区分 NULL，应该使用 rs.getObject("region_id") 然后判断是否为 null
                     Integer regionId = (Integer) rs.getObject("region_id");
                     if (regionId != null) {
                         user.setRegionId(regionId);
@@ -98,6 +104,8 @@ public class UserDAO {
                     user.setRegistrationDate(rs.getTimestamp("registration_date"));
                     user.setLastLoginDate(rs.getTimestamp("last_login_date"));
                     user.setActive(rs.getBoolean("is_active"));
+                    // --- 新增: 读取并设置 current_avatar_path ---
+                    user.setCurrentAvatarPath(rs.getString("current_avatar_path"));
                 }
             }
         } catch (SQLException e) {
@@ -117,5 +125,21 @@ public class UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // --- 初始化用户的历史头像记录 ---
+    public boolean initializeHistoricalAvatars(int userId) {
+        String sql = "INSERT INTO user_historical_avatars (user_id, avatar1_path, avatar2_path, avatar3_path) VALUES (?, NULL, NULL, NULL)";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId); // 设置新用户的 user_id
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0; // 如果插入成功，返回 true
+        } catch (SQLException e) {
+            e.printStackTrace(); // 实际项目中应使用日志
+            return false;
+        }
     }
 }

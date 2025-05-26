@@ -28,7 +28,7 @@
             </div>
         </c:if>
 
-        <form action="${pageContext.request.contextPath}/register" method="post" class="login-form">
+        <form action="${pageContext.request.contextPath}/register" method="post" class="login-form" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="username">用户名</label>
                 <input type="text" id="username" name="username" value="<c:out value='${not empty requestScope.username ? requestScope.username : param.username}'/>" placeholder="3-50位字符" required>
@@ -48,6 +48,11 @@
             <div class="form-group">
                 <label for="nickname">昵称 (可选)</label>
                 <input type="text" id="nickname" name="nickname" value="<c:out value='${not empty requestScope.nickname ? requestScope.nickname : param.nickname}'/>" placeholder="您希望被如何称呼">
+            </div>
+            <div class="form-group form-group-avatar">
+                <label for="avatarFile">选择头像 (可选)</label>
+                <input type="file" id="avatarFile" name="avatarFile" accept="image/png, image/jpeg, image/gif">
+                <img id="avatarPreview" src="#" alt="头像预览" />
             </div>
             <div class="form-group">
                 <label for="ageGroup">年龄段 (可选)</label>
@@ -83,6 +88,25 @@
         if (captchaImage) {
             captchaImage.addEventListener('click', function() {
                 this.src = '${pageContext.request.contextPath}/captchaImage?r=' + Math.random();
+            });
+        }
+
+        var avatarFileInput = document.getElementById('avatarFile');
+        var avatarPreview = document.getElementById('avatarPreview');
+        if (avatarFileInput && avatarPreview) {
+            avatarFileInput.addEventListener('change', function(event) {
+                var file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) { // 确保是图片文件
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                        avatarPreview.style.display = 'block'; // 显示预览图片
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    avatarPreview.src = '#'; // 清除预览
+                    avatarPreview.style.display = 'none'; // 隐藏预览图片
+                }
             });
         }
 

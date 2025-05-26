@@ -15,6 +15,7 @@ public class User {
     private Timestamp registrationDate;
     private Timestamp lastLoginDate;
     private boolean isActive; // 对应数据库 TINYINT(1)
+    private String currentAvatarPath; // 可选字段，存储当前头像的 URL
 
     // 构造函数 (可以有多个，例如一个无参，一个包含所有必要字段)
     public User() {
@@ -120,6 +121,9 @@ public class User {
     public void setActive(boolean active) {
         isActive = active;
     }
+    public String getCurrentAvatarPath() {return currentAvatarPath;}
+
+    public void setCurrentAvatarPath(String currentAvatarPath) {this.currentAvatarPath = currentAvatarPath;}
 
     // (可选) toString() 方法，方便调试
     @Override
@@ -130,6 +134,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", role='" + role + '\'' +
+                ", registrationDate=" + registrationDate +
                 '}';
     }
 }

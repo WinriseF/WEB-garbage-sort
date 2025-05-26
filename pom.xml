@@ -12,8 +12,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source> <!-- 你的JDK版本 -->
-    <maven.compiler.target>21</maven.compiler.target> <!-- 你的JDK版本 -->
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
     <!-- Java EE 8 API versions -->
     <javaee.api.version>8.0.1</javaee.api.version> <!-- Java EE 8 Platform API -->
     <servlet.api.version>4.0.1</servlet.api.version>
@@ -93,6 +93,18 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.16.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.5</version>
     </dependency>
   </dependencies>
 
