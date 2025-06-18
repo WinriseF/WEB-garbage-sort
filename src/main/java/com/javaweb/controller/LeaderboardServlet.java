@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/leaderboard") // 例如 ${pageContext.request.contextPath}/leaderboard
+@WebServlet("/leaderboard")
 public class LeaderboardServlet extends HttpServlet {
     private UserGameScoreDAO userGameScoreDAO;
 
@@ -51,7 +51,6 @@ public class LeaderboardServlet extends HttpServlet {
         request.setAttribute("leaderboardData", leaderboardData);
         request.setAttribute("gameIdForTitle", gameId); // 用于在标题中显示是哪个游戏的排行榜
 
-        request.getRequestDispatcher("/jsp/leaderboard.jsp").forward(request, response);
-        // 将 JSP 放在 WEB-INF 下，防止直接通过 URL 访问
+        request.getRequestDispatcher("/games/leaderboard.jsp").forward(request, response);
     }
 }

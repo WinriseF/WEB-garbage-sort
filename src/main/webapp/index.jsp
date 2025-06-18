@@ -53,13 +53,9 @@
     <a href="${pageContext.request.contextPath}/reports/new">随手拍</a>
     <a href="${pageContext.request.contextPath}/recycling">旧物回收</a>
 
-    <%-- 管理员和编辑的特定导航 --%>
-    <c:if test="${sessionScope.loggedInUser.role == 'admin' || sessionScope.loggedInUser.role == 'editor'}">
-        <a href="${pageContext.request.contextPath}/admin/content">内容管理</a>
-    </c:if>
+    <%-- 管理后台入口 --%>
     <c:if test="${sessionScope.loggedInUser.role == 'admin'}">
-        <a href="${pageContext.request.contextPath}/admin/users">用户管理</a>
-        <a href="${pageContext.request.contextPath}/admin/stats">数据统计</a>
+        <a href="${pageContext.request.contextPath}/admin/dashboard">管理后台</a>
     </c:if>
 </nav>
 

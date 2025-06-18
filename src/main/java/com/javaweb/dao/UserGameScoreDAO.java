@@ -62,4 +62,22 @@ public class UserGameScoreDAO {
         }
         return leaderboard;
     }
+
+    /**
+     * 统计所有游戏记录的总数。
+     * @return 游戏总次数。
+     */
+    public int countTotalGamePlays() {
+        String sql = "SELECT COUNT(*) FROM UserGameScores";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

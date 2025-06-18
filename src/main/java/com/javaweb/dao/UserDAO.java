@@ -4,6 +4,8 @@ import com.javaweb.model.User;
 import com.javaweb.util.DBUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 
@@ -192,5 +194,114 @@ public class UserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<User> findAllUsers() {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT user_id, username, email, nickname, role, registration_date, is_active FROM Users ORDER BY registration_date DESC";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setNickname(rs.getString("nickname"));
+                user.setRole(rs.getString("role"));
+                user.setRegistrationDate(rs.getTimestamp("registration_date"));
+                user.setActive(rs.getBoolean("is_active"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
+    /**
+     * 【新增】根据用户ID删除一个用户。
+     * @param userId 要删除的用户的ID。
+     * @return 如果删除成功，返回 true。
+     */
+    public boolean deleteUserById(int userId) {
+        String sql = "DELETE FROM Users WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 【新增】更新用户的部分信息（通常由管理员操作）。
+     * @param user 包含要更新信息的 User 对象。
+     * @return 如果更新成功，返回 true。
+     */
+    public boolean updateUserByAdmin(User user) {
+        String sql = "UPDATE Users SET nickname = ?, email = ?, role = ?, is_active = ? WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, user.getNickname());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getRole());
+            pstmt.setBoolean(4, user.isActive());
+            pstmt.setInt(5, user.getUserId());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 【新增】根据用户ID查找用户，用于编辑用户信息前的加载。
+     * @param userId 用户ID。
+     * @return 返回找到的 User 对象，或 null。
+     */
+    public User findById(int userId) {
+        User user = null;
+        String sql = "SELECT user_id, username, email, nickname, role, registration_date, is_active FROM Users WHERE user_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User();
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setEmail(rs.getString("email"));
+                    user.setNickname(rs.getString("nickname"));
+                    user.setRole(rs.getString("role"));
+                    user.setRegistrationDate(rs.getTimestamp("registration_date"));
+                    user.setActive(rs.getBoolean("is_active"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+    /**
+     * 统计所有注册用户的总数。
+     * @return 用户总数。
+     */
+    public int countTotalUsers() {
+        String sql = "SELECT COUNT(*) FROM Users";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
