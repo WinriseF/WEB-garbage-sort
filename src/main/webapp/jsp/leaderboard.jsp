@@ -65,7 +65,7 @@
         </c:otherwise>
     </c:choose>
     <p style="margin-top: 20px; text-align: center;">
-        <a href="${pageContext.request.contextPath}/games/dragdrop/game.jsp">返回游戏</a> <%-- 假设游戏页面路径 --%>
+        <a href="${pageContext.request.contextPath}/games/game.jsp">返回游戏</a>
         | <a href="${pageContext.request.contextPath}/">返回首页</a>
     </p>
 </div>

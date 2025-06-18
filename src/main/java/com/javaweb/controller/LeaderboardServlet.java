@@ -51,7 +51,7 @@ public class LeaderboardServlet extends HttpServlet {
         request.setAttribute("leaderboardData", leaderboardData);
         request.setAttribute("gameIdForTitle", gameId); // 用于在标题中显示是哪个游戏的排行榜
 
-        request.getRequestDispatcher("/WEB-INF/jsp/leaderboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/leaderboard.jsp").forward(request, response);
         // 将 JSP 放在 WEB-INF 下，防止直接通过 URL 访问
     }
 }
