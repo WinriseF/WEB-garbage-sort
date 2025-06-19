@@ -50,8 +50,6 @@
             <a href="${pageContext.request.contextPath}/admin/stats" class="card-link">查看统计</a>
         </div>
 
-        <!-- 更多功能卡片... -->
-
     </div>
 </div>
 </body>

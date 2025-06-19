@@ -27,10 +27,6 @@ public class AdminDashboardServlet extends HttpServlet {
             return;
         }
 
-        // (未来可以在这里) 从DAO获取统计数据，例如:
-        // int userCount = userDAO.countAllUsers();
-        // request.setAttribute("userCount", userCount);
-
         // 转发到JSP仪表盘页面
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }

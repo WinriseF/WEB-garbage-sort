@@ -77,8 +77,8 @@
         .btn-secondary {
             background-color: #007bff;
             color: white;
-            text-decoration: none; /* 如果是链接 */
-            display: inline-block; /* 如果是链接 */
+            text-decoration: none;
+            display: inline-block;
             margin-top:10px;
         }
         .message {
@@ -96,7 +96,7 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; } /* 确保有基础样式 */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
         .profile-container {
             background-color: #fff;
             padding: 30px;
@@ -120,13 +120,13 @@
         .profile-details table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px; /* 给表格和下面的动作区一点间距 */
+            margin-bottom: 20px;
         }
         .profile-details th, .profile-details td {
             padding: 12px;
             border-bottom: 1px solid #f0f0f0;
             text-align: left;
-            vertical-align: top; /* 确保内容较多时标签和值顶部对齐 */
+            vertical-align: top;
         }
         .profile-details th {
             width: 120px;
@@ -134,16 +134,16 @@
             font-weight: bold;
         }
         .profile-actions {
-            margin-top: 20px; /* 与上一个元素的间距 */
+            margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
-        .profile-actions:first-child { /* 第一个动作区不需要上边框和上内边距 */
+        .profile-actions:first-child {
             border-top: none;
             padding-top: 0;
         }
         .profile-actions h3 {
-            margin-top: 0; /* 移除h3的上外边距，因为profile-actions已有 */
+            margin-top: 0;
             margin-bottom: 15px;
         }
         .form-group {

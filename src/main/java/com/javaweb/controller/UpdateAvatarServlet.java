@@ -27,7 +27,6 @@ import java.util.UUID;
 )
 public class UpdateAvatarServlet extends HttpServlet {
     private UserDAO userDAO;
-    // 与 RegisterServlet 保持一致的头像存储目录
     private static final String AVATAR_UPLOAD_DIR = "uploads" + File.separator + "avatars";
 
     @Override
@@ -38,7 +37,7 @@ public class UpdateAvatarServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession(false); // 不创建新session
+        HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("loggedInUser") == null) {
             response.sendRedirect(request.getContextPath() + "/login"); // 用户未登录
@@ -68,7 +67,6 @@ public class UpdateAvatarServlet extends HttpServlet {
                 if (!fileExtension.matches("\\.(jpg|jpeg|png|gif)$")) {
                     errorMessage = "头像文件格式无效，请上传 jpg, jpeg, png, 或 gif 格式的图片。";
                 } else {
-                    // 使用 userID 和时间戳或UUID确保文件名唯一 (这里用UUID，因为时间戳可能在并发下不唯一)
                     String uniqueFileName = "user" + userId + "_" + UUID.randomUUID().toString().substring(0, 8) + fileExtension;
                     String appPath = request.getServletContext().getRealPath("");
                     String uploadFilePath = appPath + File.separator + AVATAR_UPLOAD_DIR;
@@ -99,9 +97,9 @@ public class UpdateAvatarServlet extends HttpServlet {
         }
 
         if (errorMessage == null && newAvatarRelativePath != null) {
-            // 文件上传成功，现在更新数据库
+            // 文件上传成功，更新数据库
             // 1. 获取旧的历史头像 (avatar1, avatar2)
-            User.HistoricalAvatarPaths oldHistories = userDAO.getHistoricalAvatars(userId); // 需要在UserDAO中实现此方法
+            User.HistoricalAvatarPaths oldHistories = userDAO.getHistoricalAvatars(userId);
 
             // 2. 更新 Users 表中的 current_avatar_path
             boolean updateCurrentSuccess = userDAO.updateCurrentUserAvatar(userId, newAvatarRelativePath); // 需要在UserDAO中实现
@@ -115,7 +113,7 @@ public class UpdateAvatarServlet extends HttpServlet {
                         oldCurrentAvatarPath, // 这个成为新的 avatar1_path
                         (oldHistories != null ? oldHistories.getAvatar1() : null), // 旧的avatar1成为新的avatar2
                         (oldHistories != null ? oldHistories.getAvatar2() : null)  // 旧的avatar2成为新的avatar3
-                ); // 需要在UserDAO中实现此方法
+                );
 
                 if (updateHistorySuccess) {
                     successMessage = "头像更新成功！";
@@ -123,27 +121,17 @@ public class UpdateAvatarServlet extends HttpServlet {
                     loggedInUser.setCurrentAvatarPath(newAvatarRelativePath);
                     session.setAttribute("loggedInUser", loggedInUser);
 
-                    // 可选: 删除最旧的不再需要的历史头像文件 (原 avatar3_path 对应的文件)
-                    // String avatarToDelete = (oldHistories != null ? oldHistories.getAvatar3() : null);
-                    // if (avatarToDelete != null && !avatarToDelete.isEmpty()) {
-                    //     File oldFile = new File(request.getServletContext().getRealPath("") + File.separator + avatarToDelete.replace("/", File.separator));
-                    //     if (oldFile.exists()) oldFile.delete();
-                    // }
-
                 } else {
                     errorMessage = "头像已更新，但历史记录更新失败。请联系管理员。";
-                    // 注意：此时当前头像已更新，但历史记录未同步，可能需要事务回滚或补偿逻辑
                 }
             } else {
                 errorMessage = "头像更新失败，数据库操作错误。";
-                // 删除刚上传的文件，因为它没有被成功记录到数据库
                 File uploadedFile = new File(request.getServletContext().getRealPath("") + File.separator + newAvatarRelativePath.replace("/", File.separator));
                 if (uploadedFile.exists()) {
                     uploadedFile.delete();
                 }
             }
         }
-        // 设置消息并重定向回 profile 页面
         if (successMessage != null) {
             request.setAttribute("successMessage", successMessage);
         }

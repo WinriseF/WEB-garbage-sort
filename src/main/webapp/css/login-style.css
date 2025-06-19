@@ -110,10 +110,9 @@ body, html {
     border-color: #bee5eb;     /* Bootstrap info border */
     color: #0c5460;            /* Bootstrap info text */
 }
-/* ... (表单组 .form-group, label, input 样式大致保持，可以微调 padding 和 font-size) ... */
 
 .form-group {
-    margin-bottom: 18px; /* 稍微减少表单项之间的间距，如果字段多的话 */
+    margin-bottom: 18px; /* 稍微减少表单项之间的间距 */
     text-align: left;
     position: relative;
 }
@@ -149,12 +148,7 @@ body, html {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2);
 }
 
-/* ... (占位符样式 .form-group input::placeholder 保持不变) ... */
-
-/* ... (下拉框 .form-control-select 的箭头等样式保持不变，但确保 padding 与 input 一致) ... */
 .form-control-select {
-    /* padding: 12px 15px; 已经在上面统一设置 */
-    /* padding-right: 2.5rem; 如果有自定义箭头，确保这个值正确 */
 }
 
 
@@ -219,7 +213,7 @@ body, html {
 }
 
 /* --- 响应式调整 --- */
-@media (max-width: 640px) { /* 调整断点以适应新的 register-container max-width */
+@media (max-width: 640px) {
     .login-wrapper {
         padding: 20px 15px; /* 小屏幕上减少 wrapper 的 padding */
         align-items: flex-start; /* 在非常小的屏幕或内容溢出时，从顶部开始对齐 */
@@ -249,7 +243,7 @@ body, html {
 
 
 
-/* 新增：专门用于验证码输入框和图片的行容器 */
+/* 专门用于验证码输入框和图片的行容器 */
 .captcha-row {
     display: flex; /* 使用flex布局 */
     align-items: center; /* 垂直居中对齐输入框和图片 */
@@ -260,8 +254,6 @@ body, html {
 .captcha-row input[type="text"] {
     flex-grow: 1; /* 让输入框占据剩余的可用空间 */
     margin-right: 10px; /* 输入框和图片之间的间距 */
-    /* 宽度由flex-grow决定，所以不需要再设置width: 100% */
-    /* 其他样式如 padding, border, height, border-radius 会从上面的通用input规则继承 */
 }
 
 /* 针对验证码图片 */
@@ -274,7 +266,7 @@ body, html {
 }
 
 
-/* 新增：添加头像 */
+/* 添加头像 */
 .form-group-avatar {
     margin-bottom: 15px; /* 或根据你的设计调整 */
 }
@@ -289,7 +281,7 @@ body, html {
     border: 1px solid #ddd;
     display: none; /* 初始隐藏 */
 }
-/* 新增: 裁剪模态框的基本样式 (你可以根据需要美化) */
+/* 裁剪模态框的基本样式 */
 .cropper-modal-container {
     display: none;       /* (关键) 初始状态设置为隐藏 */
     position: fixed;
@@ -299,8 +291,6 @@ body, html {
     height: 100%;
     background-color: rgba(0,0,0,0.7);
     z-index: 1000;
-    /* display: flex;  <-- 将这一行从CSS中移除或注释掉，因为JS会控制它 */
-    /* 当JS需要显示它时，会通过 style.display = 'flex' 来设置下面的对齐属性才会生效 */
     align-items: center; /* 这些对齐属性在 display:flex 时生效 */
     justify-content: center;
 }

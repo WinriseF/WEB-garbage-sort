@@ -35,9 +35,6 @@ public class UserGameScoreDAO {
     public List<UserGameScoreEntry> getLeaderboard(int gameId, int limit) {
         List<UserGameScoreEntry> leaderboard = new ArrayList<>();
         // 查询用户昵称、分数、游戏时长、游戏时间
-        // "巅峰排名" 通常指历史最高分，所以我们可能需要每个用户的最高分
-        // 这里先做一个简单的排名，取最近的最高分记录
-        // 如果要严格的“每个用户的历史最高分”排名，SQL会更复杂
         String sql = "SELECT u.nickname, ugs.score, ugs.duration_seconds, ugs.played_at " +
                 "FROM UserGameScores ugs " +
                 "JOIN Users u ON ugs.user_id = u.user_id " +

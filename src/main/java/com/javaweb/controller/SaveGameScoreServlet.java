@@ -1,6 +1,6 @@
-package com.javaweb.controller; // 或你的包名
+package com.javaweb.controller;
 
-import com.google.gson.Gson; // 如果使用 Gson 解析 JSON
+import com.google.gson.Gson;
 import com.javaweb.dao.UserGameScoreDAO;
 import com.javaweb.model.User;
 
@@ -17,8 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-// 确保 WebServlet 路径与前端 fetch 的 URL 匹配
-@WebServlet("/saveGameScore") // 例如 ${pageContext.request.contextPath}/saveGameScore
+@WebServlet("/saveGameScore")
 public class SaveGameScoreServlet extends HttpServlet {
     private UserGameScoreDAO userGameScoreDAO;
     private Gson gson; // 用于解析JSON
@@ -26,7 +25,7 @@ public class SaveGameScoreServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         userGameScoreDAO = new UserGameScoreDAO();
-        gson = new Gson(); // 需要在 pom.xml 中添加 Gson 依赖
+        gson = new Gson(); // 需在 pom.xml 中添加 Gson 依赖
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -82,14 +81,14 @@ public class SaveGameScoreServlet extends HttpServlet {
                 respMap.put("message", "分数已成功保存！");
                 response.getWriter().write(gson.toJson(respMap));
             } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 服务器内部错误
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 respMap.put("status", "error");
                 respMap.put("message", "保存分数时发生服务器错误。");
                 response.getWriter().write(gson.toJson(respMap));
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // 应该使用日志框架
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             respMap.put("status", "error");
             respMap.put("message", "处理请求时发生异常: " + e.getMessage());
@@ -97,7 +96,6 @@ public class SaveGameScoreServlet extends HttpServlet {
         }
     }
 
-    // 用于 Gson 解析的内部类
     private static class GameScoreData {
         private Integer gameId;
         private Integer score;

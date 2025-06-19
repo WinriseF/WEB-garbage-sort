@@ -24,17 +24,15 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: 
 .footer { text-align: center; padding: 20px; background-color: #333; color: white; margin-top: 30px; }
 
 /*头像*/
-/* 包裹头像、欢迎语和注销链接的容器 */
 .user-nav .user-info {
     display: flex;       /* 启用 Flexbox 布局 */
-    align-items: center; /* (关键) 让它的直接子元素（两个 <a> 标签）垂直居中对齐 */
-    /* gap: 15px; */    /* 可选: 如果你想用 gap 替代 margin-left 来控制链接间距 */
+    align-items: center; /* 让它的直接子元素（两个 <a> 标签）垂直居中对齐 */
 }
 
 /* 第一个链接 (包含头像和欢迎语) */
 .user-nav .user-info > a:first-child {
-    display: inline-flex; /* (关键) 使这个链接本身也成为一个 Flexbox 容器 */
-    align-items: center;  /* (关键) 让它内部的直接子元素（头像<img> 和 欢迎文字<span>）垂直居中对齐 */
+    display: inline-flex; /* 使这个链接本身也成为一个 Flexbox 容器 */
+    align-items: center;  /* 让它内部的直接子元素（头像<img> 和 欢迎文字<span>）垂直居中对齐 */
     text-decoration: none; /* 移除链接下划线 */
     color: white;          /* 设置文字颜色，确保与页头风格一致 */
 }
@@ -43,7 +41,7 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: 
     text-decoration: none; /* 或其他你希望的悬停效果 */
 }
 
-/* 用户头像图片 (class="user-avatar") */
+/* 用户头像图片 */
 .user-nav .user-avatar {
     width: 32px;
     height: 32px;
@@ -51,20 +49,17 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: 
     margin-right: 8px;   /* 头像和欢迎文字之间的间距 */
     object-fit: cover;   /* 确保图片不变形地填充容器 */
     border: 1px solid #ddd;
-    /* vertical-align: middle; /* 在其父元素是 inline-flex 且 align-items:center 时，通常不再需要 */
 }
 
-/* 欢迎文字 (class="user-info-text") */
+/* 欢迎文字 */
 .user-nav .user-info-text {
-    /* 在其父元素(a:first-child)是 inline-flex 且 align-items:center 时，通常不再需要特别的垂直对齐 */
-    /* color: white; /* 如果颜色没有从父链接继承，可以在此指定 */
 }
 
-/* 第二个链接 (注销链接) */
+/* 第二个链接 */
 .user-nav .user-info > a:last-child {
     text-decoration: none;
     color: white;      /* 确保文字颜色一致 */
-    margin-left: 15px; /* 你当前使用的间距，如果用了 gap 就可以去掉这个 */
+    margin-left: 15px;
 }
 
 .user-nav .user-info > a:last-child:hover {

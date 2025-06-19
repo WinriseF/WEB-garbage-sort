@@ -24,8 +24,6 @@ public class Video {
     // 默认构造函数
     public Video() {}
 
-    // --- 所有属性的 Getter 和 Setter 方法 ---
-    // (为了简洁，这里省略了具体的getter/setter代码，请确保你的文件中有这些方法)
 
     public int getVideoId() { return videoId; }
     public void setVideoId(int videoId) { this.videoId = videoId; }

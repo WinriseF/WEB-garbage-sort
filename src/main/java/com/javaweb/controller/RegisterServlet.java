@@ -31,7 +31,7 @@ import java.util.UUID;
 public class RegisterServlet extends HttpServlet {
     private UserDAO userDAO;
 
-    private static final String AVATAR_UPLOAD_DIR = "uploads" + File.separator + "avatars";//写入位置
+    private static final String AVATAR_UPLOAD_DIR = "uploads" + File.separator + "avatars";
     @Override
     public void init() throws ServletException {
         userDAO = new UserDAO();
@@ -55,9 +55,8 @@ public class RegisterServlet extends HttpServlet {
         String ageGroup = request.getParameter("ageGroup");
         String userCaptchaInput = request.getParameter("captcha");
 
-        Part avatarFilePart = request.getPart("avatarFile"); // "avatarFile" 对应 JSP 中 <input type="file"> 的 name 属性
-
-        HttpSession session = request.getSession(); // 获取或创建会话
+        Part avatarFilePart = request.getPart("avatarFile");
+        HttpSession session = request.getSession();
         String storedCaptchaAnswer = (String) session.getAttribute("captchaAnswer");
 
         if (storedCaptchaAnswer != null) {
@@ -66,7 +65,6 @@ public class RegisterServlet extends HttpServlet {
 
 
         String errorMessage = null;
-        //验证码校验
         if (userCaptchaInput == null || userCaptchaInput.trim().isEmpty()) {
             errorMessage = "请输入验证码！";
         } else if (storedCaptchaAnswer == null) {
@@ -105,10 +103,10 @@ public class RegisterServlet extends HttpServlet {
             setFormAttributes(request, username, email, nickname, ageGroup);
             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
         } else {
-            // 新增: 用于存储头像相对路径的变量
+            // 用于存储头像相对路径的变量
             String avatarRelativePath = null;
 
-            // 新增: 处理头像上传的逻辑
+            // 处理头像上传的逻辑
             if (avatarFilePart != null && avatarFilePart.getSize() > 0) { // 检查是否有文件上传且文件不为空
                 String originalFileName = Paths.get(avatarFilePart.getSubmittedFileName()).getFileName().toString(); // 获取原始文件名
 
@@ -120,7 +118,7 @@ public class RegisterServlet extends HttpServlet {
                         fileExtension = originalFileName.substring(i); // 获取文件扩展名，例如 ".jpg"
                     }
 
-                    // 新增: 对文件扩展名进行简单校验
+                    // 对文件扩展名进行简单校验
                     if (!fileExtension.toLowerCase().matches("\\.(jpg|jpeg|png|gif)$")) {
                         request.setAttribute("errorMessage", "头像文件格式无效，请上传 jpg, jpeg, png, 或 gif 格式的图片。");
                         setFormAttributes(request, username, email, nickname, ageGroup);
@@ -133,14 +131,13 @@ public class RegisterServlet extends HttpServlet {
                     String uploadFilePath = appPath + File.separator + AVATAR_UPLOAD_DIR; // 完整的头像存储目录路径
 
                     File uploadDir = new File(uploadFilePath);
-                    if (!uploadDir.exists()) { // 如果目录不存在
+                    if (!uploadDir.exists()) {
                         if (!uploadDir.mkdirs()) { // 创建目录
-                            // 记录错误，这通常是服务器配置或权限问题
                             System.err.println("无法创建头像上传目录: " + uploadFilePath);
                             request.setAttribute("errorMessage", "服务器错误：无法创建头像存储目录。");
                             setFormAttributes(request, username, email, nickname, ageGroup);
                             request.getRequestDispatcher("/user/register.jsp").forward(request, response);
-                            return; // 停止处理
+                            return;
                         }
                     }
 
@@ -148,7 +145,6 @@ public class RegisterServlet extends HttpServlet {
                     try (InputStream fileContent = avatarFilePart.getInputStream()) { // 获取上传文件的输入流
                         Files.copy(fileContent, storeFile.toPath(), StandardCopyOption.REPLACE_EXISTING); // 将文件内容复制到服务器目标文件
                         avatarRelativePath = AVATAR_UPLOAD_DIR + File.separator + uniqueFileName; // 构造存储在数据库中的相对路径
-                        // 将路径中的反斜杠（Windows）替换为正斜杠（Web URL 标准）
                         avatarRelativePath = avatarRelativePath.replace(File.separator, "/");
                         System.out.println("头像已上传至: " + storeFile.getAbsolutePath() + " | 相对路径: " + avatarRelativePath);
                     } catch (IOException e) {
@@ -173,28 +169,23 @@ public class RegisterServlet extends HttpServlet {
             newUser.setActive(true); // 默认激活
             newUser.setRegistrationDate(new Timestamp(new Date().getTime()));
 
-            // 新增: 如果头像上传成功，将其相对路径设置到 newUser 对象中
+            // 如果头像上传成功，将其相对路径设置到 newUser 对象中
             if (avatarRelativePath != null) {
-                newUser.setCurrentAvatarPath(avatarRelativePath); // 假设 User 模型类有 setCurrentAvatarPath 方法
+                newUser.setCurrentAvatarPath(avatarRelativePath);
             }
 
-            // 修改: 调用 addUser 方法，并期望它返回新用户的 user_id
-            // 你需要修改 UserDAO.addUser() 方法的返回类型为 int (user_id)
             int newUserId = userDAO.addUser(newUser);
 
             if (newUserId > 0) { // addUser 成功并返回了有效的 user_id
-                // 新增: 为新用户初始化历史头像记录
-                // 你需要在 UserDAO 中实现 initializeHistoricalAvatars 方法
+                // 为新用户初始化历史头像记录
                 if (!userDAO.initializeHistoricalAvatars(newUserId)) {
-                    // 记录警告: 用户注册成功，但历史头像记录初始化失败。
-                    // 这对用户来说可能不是致命错误，但后台需要记录。
                     System.err.println("警告: 用户 " + newUserId + " 注册成功, 但初始化历史头像记录失败。");
                 }
                 // 注册成功
                 response.sendRedirect(request.getContextPath() + "/user/login.jsp?registered=true");
             } else {
                 request.setAttribute("errorMessage", "注册失败，请稍后再试或联系管理员。");
-                // 新增: 如果头像已上传但数据库操作失败，尝试删除已上传的文件以避免孤立文件
+                // 如果头像已上传但数据库操作失败，尝试删除已上传的文件以避免孤立文件
                 if (avatarRelativePath != null) {
                     String appPath = request.getServletContext().getRealPath("");
                     // 将相对路径转换为绝对路径

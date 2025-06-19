@@ -17,7 +17,7 @@ public class User {
     private boolean isActive; // 对应数据库 TINYINT(1)
     private String currentAvatarPath; // 可选字段，存储当前头像的 URL
 
-    // 构造函数 (可以有多个，例如一个无参，一个包含所有必要字段)
+    // 构造函数
     public User() {
     }
 
@@ -125,7 +125,6 @@ public class User {
 
     public void setCurrentAvatarPath(String currentAvatarPath) {this.currentAvatarPath = currentAvatarPath;}
 
-    // (可选) toString() 方法，方便调试
     @Override
     public String toString() {
         return "User{" +

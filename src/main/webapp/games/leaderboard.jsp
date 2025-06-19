@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>游戏排行榜 - 智能垃圾分类教育平台</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"> <%-- 假设有通用样式 --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
         .leaderboard-container { max-width: 800px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -25,7 +25,6 @@
     <h1>游戏排行榜
         <c:choose>
             <c:when test="${gameIdForTitle == 1}"> (拖拽分类)</c:when>
-            <%-- 可以为其他游戏 ID 添加更多 case --%>
             <c:otherwise> (游戏 ID: ${gameIdForTitle})</c:otherwise>
         </c:choose>
     </h1>

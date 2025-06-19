@@ -39,7 +39,6 @@
         </div>
         <div class="form-group">
             <label for="videoIframe">B站嵌入代码 (*)</label>
-            <%-- 关键修改：将input换成textarea，并修改name --%>
             <textarea id="videoIframe" name="videoIframe" placeholder="请在此处粘贴从B站分享功能复制的完整 <iframe> 代码" required></textarea>
         </div>
         <div class="form-group">

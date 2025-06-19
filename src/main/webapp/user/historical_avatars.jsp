@@ -23,7 +23,7 @@
             border-radius: 4px;
             padding: 15px;
             text-align: center;
-            width: calc(33.333% - 40px); /* 大致三列，需要根据gap调整 */
+            width: calc(33.333% - 40px);
             min-width: 200px; /* 最小宽度 */
             box-sizing: border-box;
         }

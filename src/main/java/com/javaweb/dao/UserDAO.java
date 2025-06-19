@@ -21,7 +21,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // 实际项目中应使用日志
+            e.printStackTrace();
         }
         return false;
     }
@@ -31,7 +31,7 @@ public class UserDAO {
         if (email == null || email.trim().isEmpty()) {
             return false;
         }
-        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?"; // 假设表名是 Users
+        String sql = "SELECT COUNT(*) FROM Users WHERE email = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
@@ -46,7 +46,7 @@ public class UserDAO {
         return false;
     }
 
-    // 添加用户 (注册)
+    // 添加用户
     public int addUser(User user) {
         // 在调用此方法前，应已校验用户名和邮箱的唯一
         String sql = "INSERT INTO Users (username, password_hash, email, nickname, age_group, role, registration_date, is_active, current_avatar_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -56,7 +56,7 @@ public class UserDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getPasswordHash()); // 密码应已哈希
+            pstmt.setString(2, user.getPasswordHash()); // 密码哈希
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getNickname());
             pstmt.setString(5, user.getAgeGroup());
@@ -76,9 +76,8 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // 实际项目中应使用日志
+            e.printStackTrace();
         }
-        // --- 返回获取到的 user_id (如果失败则为0) ---
         return generatedUserId;
     }
 
@@ -162,7 +161,7 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // 或者返回一个包含null路径的HistoricalAvatarPaths对象
+        return null;
     }
 
     public boolean updateCurrentUserAvatar(int userId, String newAvatarPath) {
@@ -178,7 +177,6 @@ public class UserDAO {
         }
     }
     public boolean updateHistoricalAvatars(int userId, String newHist1, String newHist2, String newHist3) {
-        // 因为 initializeHistoricalAvatars 应该已经创建了记录，所以这里总是 UPDATE
         String sql = "UPDATE user_historical_avatars SET avatar1_path = ?, avatar2_path = ?, avatar3_path = ? WHERE user_id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -187,8 +185,6 @@ public class UserDAO {
             pstmt.setString(3, newHist3);
             pstmt.setInt(4, userId);
             int affectedRows = pstmt.executeUpdate();
-            // 如果 initializeHistoricalAvatars 可能没执行或失败，这里可以加一个判断
-            // if (affectedRows == 0) { /*尝试 INSERT a new record*/ }
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -222,7 +218,7 @@ public class UserDAO {
     }
 
     /**
-     * 【新增】根据用户ID删除一个用户。
+     * 根据用户ID删除一个用户。
      * @param userId 要删除的用户的ID。
      * @return 如果删除成功，返回 true。
      */
@@ -239,7 +235,7 @@ public class UserDAO {
     }
 
     /**
-     * 【新增】更新用户的部分信息（通常由管理员操作）。
+     * 更新用户的部分信息（通常由管理员操作）。
      * @param user 包含要更新信息的 User 对象。
      * @return 如果更新成功，返回 true。
      */

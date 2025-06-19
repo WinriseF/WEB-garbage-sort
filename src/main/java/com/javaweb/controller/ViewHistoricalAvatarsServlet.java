@@ -1,7 +1,7 @@
 package com.javaweb.controller;
 
 import com.javaweb.dao.UserDAO;
-import com.javaweb.model.User; // User 类中需要有 HistoricalAvatarPaths 内部类或等效的Bean
+import com.javaweb.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +35,6 @@ public class ViewHistoricalAvatarsServlet extends HttpServlet {
         User.HistoricalAvatarPaths historicalAvatars = userDAO.getHistoricalAvatars(userId);
 
         if (historicalAvatars == null) {
-            // 创建一个空的 Paths 对象，避免JSP中出现空指针，或者在JSP中处理null
             historicalAvatars = new User.HistoricalAvatarPaths(null, null, null);
         }
 

@@ -1,5 +1,5 @@
 package com.javaweb.controller;
-
+//验证码执行文件逻辑
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +32,7 @@ public class CaptchaServlet extends HttpServlet {
         String operatorStr;
         int answer;
 
-        int opChoice = random.nextInt(3); // 0 for +, 1 for -, 2 for *
+        int opChoice = random.nextInt(3);
 
         switch (opChoice) {
             case 0: // 加法
@@ -51,10 +51,10 @@ public class CaptchaServlet extends HttpServlet {
                 answer = num1 - num2;
                 break;
             default:
-                operatorChar = '×'; // 使用更美观的乘号
-                operatorStr = "×";
-                num1 = random.nextInt(9) + 1; // 1-9
-                num2 = random.nextInt(9) + 1; // 1-9
+                operatorChar = '*';
+                operatorStr = "*";
+                num1 = random.nextInt(9) + 1;
+                num2 = random.nextInt(9) + 1;
                 answer = num1 * num2;
                 break;
         }
@@ -92,7 +92,7 @@ public class CaptchaServlet extends HttpServlet {
             g2d.drawLine(x1, y1, x2, y2);
         }
 
-        // 设置字体 (在获取 FontMetrics 之前设置)
+        // 设置字体
         Font font;
         try {
             font = new Font("Arial", Font.BOLD, FONT_SIZE);
@@ -102,7 +102,7 @@ public class CaptchaServlet extends HttpServlet {
         g2d.setFont(font);
         FontMetrics fm = g2d.getFontMetrics();
 
-        // 绘制问题文本 (逐字符绘制，以应用旋转和位移)
+        // 绘制问题文本
         int charSpacing = 2; // 字符间的额外间距
         int totalTextWidth = 0;
         for (char c : question.toCharArray()) {
@@ -147,19 +147,10 @@ public class CaptchaServlet extends HttpServlet {
         }
 
 
-        // 绘制更多的噪点
-//        for (int i = 0; i < 20; i++) {
-//            int x_dot = random.nextInt(WIDTH);
-//            int y_dot = random.nextInt(HEIGHT);
-//            // 噪点颜色更随机，但避免纯白
-//            g2d.setColor(new Color(random.nextInt(225), random.nextInt(225), random.nextInt(225)));
-//            g2d.fillRect(x_dot, y_dot, 1, 1);
-//        }
-
         g2d.dispose();
         // ---- 绘制结束 ----
 
-        //设置响应头，告诉浏览器这是一个图片
+        //设置响应头
         response.setContentType("image/png");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");

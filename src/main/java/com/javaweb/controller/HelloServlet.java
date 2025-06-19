@@ -1,6 +1,6 @@
-package com.javaweb.controller; // 根据你的包名修改
-
-import com.javaweb.util.DBUtil; // 引入你的DBUtil
+package com.javaweb.controller;
+//测试数据库文件
+import com.javaweb.util.DBUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet("/hello") // Servlet 3.0+ 注解方式配置
+@WebServlet("/hello")
 public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

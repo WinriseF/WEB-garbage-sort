@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("loggedInUser") != null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp"); // 或用户主页
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
         request.removeAttribute("errorMessage"); // 清除之前的错误信息
@@ -53,7 +53,6 @@ public class LoginServlet extends HttpServlet {
         if (userCaptchaInput == null || userCaptchaInput.trim().isEmpty()) {
             errorMessage = "请输入验证码！";
         } else if (storedCaptchaAnswer == null) {
-            // 这通常意味着session过期或者验证码从未生成/存储
             errorMessage = "验证码已失效，请刷新页面重试！";
         } else if (!userCaptchaInput.trim().equals(storedCaptchaAnswer)) {
             errorMessage = "验证码错误！";
@@ -84,7 +83,6 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("/user/login.jsp").forward(request, response);
         } else {
             // 登录成功
-            //HttpSession session = request.getSession(); //上面已经创建了
             session.setAttribute("loggedInUser", user); // 将 User 对象存入 session
             session.setAttribute("username", user.getUsername()); // 也可以单独存用户名等常用信息
             session.setAttribute("userRole", user.getRole());

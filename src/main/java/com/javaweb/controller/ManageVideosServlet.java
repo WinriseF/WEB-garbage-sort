@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-// 将这个Servlet映射到一个新的、专门用于管理的路径
 @WebServlet("/admin/videos/manage")
 public class ManageVideosServlet extends HttpServlet {
     private VideoDAO videoDAO;
@@ -37,7 +36,6 @@ public class ManageVideosServlet extends HttpServlet {
             return;
         }
 
-        // 使用 findAll() 方法获取所有视频，而不仅仅是已发布的
         List<Video> allVideos = videoDAO.findAll();
 
         request.setAttribute("videoList", allVideos);

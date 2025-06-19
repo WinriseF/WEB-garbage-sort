@@ -1,4 +1,4 @@
-package com.javaweb.controller; // 或你的包名
+package com.javaweb.controller;
 
 import com.javaweb.dao.UserGameScoreDAO;
 import com.javaweb.model.UserGameScoreEntry;
@@ -22,14 +22,12 @@ public class LeaderboardServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 从请求参数获取 game_id，如果未提供，则默认为拖拽游戏 (ID 1)
         String gameIdParam = request.getParameter("gameId");
         int gameId = 1; // 默认拖拽游戏
         if (gameIdParam != null && !gameIdParam.isEmpty()) {
             try {
                 gameId = Integer.parseInt(gameIdParam);
             } catch (NumberFormatException e) {
-                // gameId 无效，保持默认或显示错误
                 System.err.println("无效的 gameId 参数: " + gameIdParam);
             }
         }
@@ -39,7 +37,7 @@ public class LeaderboardServlet extends HttpServlet {
         if (limitParam != null && !limitParam.isEmpty()) {
             try {
                 limit = Integer.parseInt(limitParam);
-                if (limit <= 0 || limit > 100) limit = 10; // 限制范围
+                if (limit <= 0 || limit > 100) limit = 10;
             } catch (NumberFormatException e) {
                 System.err.println("无效的 limit 参数: " + limitParam);
             }
@@ -49,7 +47,7 @@ public class LeaderboardServlet extends HttpServlet {
         List<UserGameScoreEntry> leaderboardData = userGameScoreDAO.getLeaderboard(gameId, limit);
 
         request.setAttribute("leaderboardData", leaderboardData);
-        request.setAttribute("gameIdForTitle", gameId); // 用于在标题中显示是哪个游戏的排行榜
+        request.setAttribute("gameIdForTitle", gameId);
 
         request.getRequestDispatcher("/games/leaderboard.jsp").forward(request, response);
     }

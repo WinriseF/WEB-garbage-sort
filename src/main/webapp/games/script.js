@@ -21,7 +21,6 @@ function shuffleArray(array) {
 }
 
 
-// --- 游戏初始化与重置 ---
 function initializeGame() {
     score = 0;
     updateScore();
@@ -39,10 +38,9 @@ function initializeGame() {
 }
 
 function clearGarbageItems() {
-    garbageItemsContainer.innerHTML = ''; // 清空垃圾项
+    garbageItemsContainer.innerHTML = '';
 }
 
-// 从外部列表按难度比例随机选择 
 function populateGarbageItems() {
     // 1. 检查外部列表是否存在且有内容
     if (typeof fullGarbageList === 'undefined' || fullGarbageList.length === 0) {
@@ -65,7 +63,6 @@ function populateGarbageItems() {
     const numSimpleTarget = ITEMS_PER_GAME - numDifficultTarget;
 
     // 5. 从打乱后的列表中选取所需数量
-    // slice 会自动处理数量不足的情况
     const selectedDifficult = difficultItems.slice(0, numDifficultTarget);
     const selectedSimple = simpleItems.slice(0, numSimpleTarget);
 
@@ -76,7 +73,6 @@ function populateGarbageItems() {
     shuffleArray(combinedSelectedItems);
 
     // 8. 更新界面上显示的总项目数
-    // (确保显示的是实际选出的数量，以防源列表不足)
     const finalItemCount = combinedSelectedItems.length;
     itemCountElement.textContent = finalItemCount;
 
@@ -87,7 +83,6 @@ function populateGarbageItems() {
         div.id = `item-${index}`; // ID 仍然基于最终列表的索引
         div.classList.add('garbage-item');
         div.dataset.type = item.type; // 存储垃圾类型
-        //存储难度信息到 DOM 元素，方便后续可能使用 (例如计分)
         div.dataset.difficult = item.difficult === true;
         div.setAttribute('draggable', 'true');
 
@@ -104,11 +99,8 @@ function populateGarbageItems() {
 function dragStart(event) {
     draggedItem = event.target;
     event.dataTransfer.setData('text/plain', event.target.id);
-    // 你也可以在这里传递难度信息，但 dataset 通常更方便
-    // event.dataTransfer.setData('difficulty', event.target.dataset.difficult);
     event.dataTransfer.effectAllowed = 'move';
     setTimeout(() => {
-        // 检查 event.target 是否仍然有效 (用户可能很快取消拖动)
         if(event.target) {
             event.target.classList.add('dragging');
         }
@@ -118,12 +110,11 @@ function dragStart(event) {
 
 function dragEnd(event) {
     // dragend 即使在拖动失败时也会触发, 确保移除样式
-    // 使用 document.getElementById 确保我们操作的是正确的、仍然存在的元素
     const item = document.getElementById(event.dataTransfer.getData('text/plain'));
     if (item) {
          item.classList.remove('dragging');
     }
-    // 或者，如果拖动成功，draggedItem 可能已被移除，所以直接用 event.target (如果还存在)
+    // 或者，如果拖动成功，draggedItem 可能已被移除，所以直接用 event.target
     if (event.target && event.target.classList.contains('garbage-item')) {
          event.target.classList.remove('dragging');
     }

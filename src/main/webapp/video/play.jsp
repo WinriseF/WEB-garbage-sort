@@ -4,138 +4,484 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title><c:out value="${video.title}"/></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><c:out value="${video.title}"/> - 智能垃圾分类教育平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 【关键修改1】: 播放器容器的样式 */
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #FFC107;
+            --light: #F5F5F5;
+            --dark: #333;
+            --gray: #777;
+            --card-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            --card-shadow-hover: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 返回按钮样式 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--card-shadow);
+            margin: 30px 0 20px;
+            border: 2px solid var(--primary);
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        /* 视频头部样式 */
+        .video-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .video-header h1 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .video-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        /* 视频播放器样式 */
+        .video-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow-hover);
+            position: relative;
+            background: #000;
+            margin-bottom: 30px;
+        }
+
         .video-player-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 宽高比 */
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer; /* 鼠标悬浮时显示为可点击的手指 */
+            padding-top: 56.25%;
+            cursor: pointer;
         }
 
-        /* 视频封面图片样式 */
-        .video-player-wrapper .video-thumbnail {
+        .video-thumbnail {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 确保图片填满容器而不变形 */
+            object-fit: cover;
             transition: opacity 0.3s ease;
         }
 
-        /* 播放按钮的样式 */
-        .video-player-wrapper .play-button-overlay {
+        .play-button-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0, 0, 0, 0.6);
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none; /* 让点击事件可以穿透到下层图片 */
-            transition: background-color 0.3s ease;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            opacity: 0.9;
         }
 
-        /* 用CSS绘制一个三角形的播放图标 */
-        .video-player-wrapper .play-button-overlay::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 15px 0 15px 26px; /* 创建一个指向右边的三角形 */
-            border-color: transparent transparent transparent white;
-            margin-left: 5px; /* 微调图标位置使其居中 */
+        .play-button-overlay i {
+            color: white;
+            font-size: 40px;
+            margin-left: 8px;
         }
 
-        /* 鼠标悬浮时的交互效果 */
         .video-player-wrapper:hover .play-button-overlay {
-            background-color: rgba(255, 0, 0, 0.8);
+            background: rgba(255, 0, 0, 0.8);
+            transform: translate(-50%, -50%) scale(1.05);
         }
 
-        /* 播放器 iframe 的样式 */
-        .video-player-wrapper iframe {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            border: none;
+        }
+
+        /* 视频信息区域 */
+        .video-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .video-description {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .video-description h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .video-description p {
+            line-height: 1.8;
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+
+        .video-meta {
+            width: 300px;
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .meta-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        /* 相关视频区域 */
+        .related-videos {
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .video-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--card-shadow);
+        }
+
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .video-thumb {
+            position: relative;
+            height: 160px;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-content {
+            padding: 20px;
+        }
+
+        .video-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            height: 50px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .video-content a {
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .video-info {
+                flex-direction: column;
+            }
+
+            .video-meta {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .video-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .video-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .video-description, .video-meta {
+                padding: 20px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container" style="max-width: 900px; margin: 20px auto; padding: 0 20px;">
-    <a href="${pageContext.request.contextPath}/videos" style="display: inline-block; margin-bottom: 20px;">« 返回视频列表</a>
+<div class="container">
+    <a href="${pageContext.request.contextPath}/videos" class="back-btn">
+        <i class="fas fa-arrow-left"></i> 返回视频列表
+    </a>
 
-    <header style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
-        <h1><c:out value="${video.title}"/></h1>
-    </header>
-
-    <!-- 【关键修改2】: HTML结构，我们只放封面，不直接放iframe -->
-    <!-- 我们将视频的URL作为 data-* 属性附加到容器上，方便JS获取 -->
-    <div class="video-player-wrapper" id="video-container" data-video-src="${video.videoUrl}">
-        <img src="${video.thumbnailUrl}" alt="视频封面: <c:out value='${video.title}'/>" class="video-thumbnail"
-             onerror="this.onerror=null;this.src='https://placehold.co/800x450/EFEFEF/AAAAAA?text=封面加载失败';">
-        <div class="play-button-overlay"></div>
+    <div class="video-header">
+        <h1><i class="fas fa-play-circle"></i> <c:out value="${video.title}"/></h1>
     </div>
 
-    <div class="video-description" style="margin-top: 20px;">
-        <h3>视频简介</h3>
-        <p><c:out value="${video.description}"/></p>
+    <div class="video-container">
+        <div class="video-player-wrapper" id="video-container" data-video-src="${video.videoUrl}">
+            <img src="${video.thumbnailUrl}" alt="视频封面: <c:out value='${video.title}'/>" class="video-thumbnail"
+                 onerror="this.onerror=null;this.src='https://placehold.co/800x450/e0f7fa/0288d1?text=垃圾分类教育'">
+            <div class="play-button-overlay">
+                <i class="fas fa-play"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-info">
+        <div class="video-description">
+            <h2><i class="fas fa-info-circle"></i> 视频简介</h2>
+            <p><c:out value="${video.description}"/></p>
+        </div>
+
+        <div class="video-meta">
+            <div class="meta-item">
+                <span class="meta-label"><i class="far fa-clock"></i> 时长</span>
+                <span class="meta-value">7:30</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="far fa-calendar-alt"></i> 上传日期</span>
+                <span class="meta-value">2023-10-15</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="far fa-eye"></i> 观看次数</span>
+                <span class="meta-value">1,254</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="far fa-thumbs-up"></i> 点赞数</span>
+                <span class="meta-value">186</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label"><i class="fas fa-tags"></i> 分类</span>
+                <span class="meta-value">环保知识</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-videos">
+        <h2 class="section-title"><i class="fas fa-film"></i> 相关推荐</h2>
+        <div class="video-grid">
+            <div class="video-item">
+                <a href="#">
+                    <div class="video-thumb">
+                        <img src="https://placehold.co/400x225/EFEFEF/AAAAAA?text=垃圾分类基础" alt="垃圾分类基础">
+                    </div>
+                    <div class="video-content">
+                        <h3>垃圾分类基础知识入门教程</h3>
+                        <div class="video-stats">
+                            <span>12:45</span>
+                            <span>864次观看</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="video-item">
+                <a href="#">
+                    <div class="video-thumb">
+                        <img src="https://placehold.co/400x225/EFEFEF/AAAAAA?text=厨余垃圾处理" alt="厨余垃圾处理">
+                    </div>
+                    <div class="video-content">
+                        <h3>家庭厨余垃圾处理与堆肥技巧</h3>
+                        <div class="video-stats">
+                            <span>18:20</span>
+                            <span>1,024次观看</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="video-item">
+                <a href="#">
+                    <div class="video-thumb">
+                        <img src="https://placehold.co/400x225/EFEFEF/AAAAAA?text=回收利用" alt="回收利用">
+                    </div>
+                    <div class="video-content">
+                        <h3>塑料回收利用的完整流程解析</h3>
+                        <div class="video-stats">
+                            <span>22:15</span>
+                            <span>1,532次观看</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="video-item">
+                <a href="#">
+                    <div class="video-thumb">
+                        <img src="https://placehold.co/400x225/EFEFEF/AAAAAA?text=环保生活" alt="环保生活">
+                    </div>
+                    <div class="video-content">
+                        <h3>10个环保生活小技巧，让地球更美好</h3>
+                        <div class="video-stats">
+                            <span>14:30</span>
+                            <span>2,156次观看</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- 【关键修改3】: 添加JavaScript逻辑 -->
 <script>
-    // 获取视频播放器容器元素
+    // 视频播放器交互逻辑
     const videoContainer = document.getElementById('video-container');
 
-    // 为容器添加一个点击事件监听器
     videoContainer.addEventListener('click', function() {
-        // 从 data-video-src 属性中获取视频的嵌入URL
         const videoSrc = this.dataset.videoSrc;
 
-        // 如果URL无效，则不执行任何操作
         if (!videoSrc) {
             console.error('未找到视频URL！');
             return;
         }
 
-        // 为了实现点击后自动播放，我们在URL末尾添加 autoplay=1 参数
-        // B站播放器支持这个参数
-        const autoplayUrl = videoSrc.includes('?') ? videoSrc + '&autoplay=1' : videoSrc + '?autoplay=1';
+        // 添加自动播放参数
+        const autoplayUrl = videoSrc.includes('?') ?
+            videoSrc + '&autoplay=1' :
+            videoSrc + '?autoplay=1';
 
-        // 创建一个新的 <iframe> 元素
+        // 创建iframe元素
         const iframe = document.createElement('iframe');
         iframe.setAttribute('src', autoplayUrl);
-        iframe.setAttribute('scrolling', 'no');
-        iframe.setAttribute('border', '0');
-        iframe.setAttribute('frameborder', 'no');
-        iframe.setAttribute('framespacing', '0');
         iframe.setAttribute('allowfullscreen', 'true');
-        iframe.setAttribute('allow', 'autoplay'); // 现代浏览器需要这个属性来允许自动播放
+        iframe.setAttribute('allow', 'autoplay');
 
-        // 清空容器内的所有内容（封面图片和播放按钮）
+        // 替换容器内容
         this.innerHTML = '';
-
-        // 将新创建的 <iframe> 播放器添加到容器中
         this.appendChild(iframe);
-
-        // 移除容器上的 cursor: pointer 样式，因为现在已经是播放器了
         this.style.cursor = 'default';
 
-    }, { once: true }); // { once: true } 表示这个事件监听器在触发一次后会自动移除，防止重复点击
-</script>
+        // 添加播放成功效果
+        this.parentElement.classList.add('playing');
 
+    }, { once: true });
+
+    // 添加简单的观看计数动画效果
+    document.addEventListener('DOMContentLoaded', function() {
+        const watchCount = document.querySelector('.meta-item:nth-child(3) .meta-value');
+        let count = 1254;
+
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3) + 1;
+            watchCount.textContent = count.toLocaleString();
+        }, 5000);
+    });
+</script>
 </body>
 </html>

@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户注册 - 智能垃圾分类教育平台</title>
-    <%-- 引用与登录页面相同的CSS文件，或者一个包含共同样式的CSS文件 --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login-style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cropper.min.css">
 </head>
@@ -110,12 +109,11 @@
         let originalFileDetails = null;
         let croppedImageBlob = null;
 
-        // 监听文件选择框的 change 事件
         avatarFileInput.addEventListener('change', function(event) {
             const files = event.target.files;
             if (files && files.length > 0) {
                 const file = files[0];
-                // 简单文件类型校验
+                // 文件类型校验
                 if (!file.type.startsWith('image/')) {
                     alert('请选择图片文件！');
                     avatarFileInput.value = ''; // 清空选择
@@ -148,7 +146,6 @@
                     });
                 };
                 reader.readAsDataURL(file);
-                // 清空文件输入框的值，这样用户下次选择相同文件也能触发 change 事件
                 avatarFileInput.value = '';
             }
         });
@@ -183,7 +180,7 @@
                         cropperInstance.destroy();
                         cropperInstance = null;
                     }
-                }, originalFileDetails.type); // 使用原始图片类型，或指定 'image/jpeg' 或 'image/png'
+                }, originalFileDetails.type);
             }
         });
 
@@ -193,14 +190,6 @@
                 event.preventDefault(); // 阻止表单的默认提交行为
 
                 const formData = new FormData(registrationForm); // 获取表单中的其他数据
-
-                // 移除可能存在的原始文件输入（如果name不是我们期望的）
-                // 如果你的 input name="avatarFileOriginal" 只是用来触发，不应提交，可以不加，
-                // 但如果与 servlet 期望的 name 冲突，则要处理。
-                // formData.delete('avatarFileOriginal');
-
-                // 将裁剪后的Blob数据添加到FormData中，字段名设置为 'avatarFile'
-                // 这是后端 RegisterServlet 中 request.getPart("avatarFile") 所期望的名称
                 let fileName = "cropped_avatar.png"; // 默认文件名和类型
                 if (originalFileDetails && originalFileDetails.name) {
                     const nameParts = originalFileDetails.name.split('.');
@@ -213,29 +202,21 @@
                 fetch(registrationForm.action, {
                     method: 'POST',
                     body: formData
-                    // 对于 FormData，浏览器通常会自动设置正确的 Content-Type header (multipart/form-data; boundary=...)
                 })
                     .then(response => {
                         // 根据Servlet的响应方式进行处理
                         if (response.ok) {
-                            if (response.redirected) { // 如果Servlet执行了response.sendRedirect()
+                            if (response.redirected) {
                                 window.location.href = response.url;
                             } else {
-                                // 如果Servlet执行了forward()，或直接写入了响应体 (例如返回错误信息页面)
                                 return response.text().then(html => {
-                                    // 这是一个简化处理，实际中可能需要更复杂的逻辑来更新页面部分或显示消息
-                                    if (response.url.includes("login.jsp?registered=true")) { // 检查是否是成功重定向的URL（虽然上面已经有redirected判断）
+                                    if (response.url.includes("login.jsp?registered=true")) {
                                         window.location.href = response.url;
                                     } else {
-                                        // 尝试将返回的HTML（可能是错误页面）直接显示在当前页面，这可能破坏布局
-                                        // 更好的方式是让Servlet返回JSON，然后JS根据JSON内容更新页面的特定部分或显示弹窗
                                         console.warn("表单提交后，服务器未重定向，收到的响应体：", html.substring(0, 500) + "...");
                                         document.open();
                                         document.write(html); // 非常粗暴地替换整个页面内容
                                         document.close();
-                                        // 或者，你可以尝试解析html中的错误信息，显示在页面的某个div中
-                                        // const errorDiv = document.querySelector('.message.error-message p');
-                                        // if(errorDiv && html.includes("errorMessage")) { /* ...解析并显示... */ }
                                     }
                                 });
                             }
@@ -253,11 +234,6 @@
                         alert('网络错误或表单提交过程中发生未知错误。');
                     });
             }
-            // 如果 croppedImageBlob 为 null (用户没有选择或没有裁剪头像)，则表单会以传统方式提交
-            // 这时，如果 avatarFileInput (id="avatarFileInput") 的 name 属性是 "avatarFile"，
-            // 那么它会提交原始文件（如果用户选择了的话）。
-            // 在当前设置中，avatarFileInput 的 name 是 "avatarFileOriginal"，所以它本身不会被提交为期望的 "avatarFile"
-            // 如果希望在不裁剪时也提交原始文件，需要确保 input 的 name="avatarFile"
         });
 
         var captchaImage = document.getElementById('captchaImage');
@@ -274,7 +250,7 @@
         var confirmPasswordInput = document.getElementById('confirmPassword');
         var emailInput = document.getElementById('email');
 
-        var errorMessageText = "<c:out value='${requestScope.errorMessage}'/>".toLowerCase(); // 转小写方便匹配
+        var errorMessageText = "<c:out value='${requestScope.errorMessage}'/>".toLowerCase();
 
         if (errorMessageText.includes("验证码")) {
             if (captchaInput) captchaInput.focus();
@@ -282,12 +258,11 @@
             if (usernameInput) usernameInput.focus();
         } else if (errorMessageText.includes("两次输入的密码不一致")) {
             if (confirmPasswordInput) confirmPasswordInput.focus();
-        } else if (errorMessageText.includes("密码")) { // 如果不是上面的不一致，那就是密码本身的问题
+        } else if (errorMessageText.includes("密码")) {
             if (passwordInput) passwordInput.focus();
         } else if (errorMessageText.includes("邮箱")) {
             if (emailInput) emailInput.focus();
         } else {
-            // 默认聚焦用户名
             if (usernameInput) usernameInput.focus();
         }
         </c:if>

@@ -25,7 +25,6 @@ public class EditVideoServlet extends HttpServlet {
         videoDAO = new VideoDAO();
     }
 
-    // 处理GET请求：显示编辑表单 (此方法无需修改)
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!isAuthorized(request)) {
@@ -63,12 +62,12 @@ public class EditVideoServlet extends HttpServlet {
             int videoId = Integer.parseInt(request.getParameter("videoId"));
             String title = request.getParameter("title");
             String description = request.getParameter("description");
-            // 【修复】获取textarea的内容，参数名是 "videoIframe"
+            // 获取textarea的内容，参数名是 "videoIframe"
             String iframeCode = request.getParameter("videoIframe");
             String thumbnailUrl = request.getParameter("thumbnailUrl");
             String status = request.getParameter("status");
 
-            // 2. 【修复】从iframe代码中提取src链接
+            // 2. 从iframe代码中提取src链接
             String videoUrl = extractSrcFromIframe(iframeCode);
             if (videoUrl == null || videoUrl.isEmpty()) {
                 // 如果提取失败，可以返回错误，或者保留旧的URL。这里我们返回错误。

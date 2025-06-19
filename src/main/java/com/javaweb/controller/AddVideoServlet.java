@@ -26,7 +26,6 @@ public class AddVideoServlet extends HttpServlet {
         videoDAO = new VideoDAO();
     }
 
-    // 当用户点击“添加新视频”链接时，显示表单页面
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!isAuthorized(request)) {
@@ -37,7 +36,6 @@ public class AddVideoServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/add_video.jsp").forward(request, response);
     }
 
-    // 当用户在表单页面点击“保存”时，处理POST请求
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!isAuthorized(request)) {
@@ -50,12 +48,12 @@ public class AddVideoServlet extends HttpServlet {
         // 1. 从表单获取数据
         String title = request.getParameter("title");
         String description = request.getParameter("description");
-        // 【修复】获取textarea的内容，参数名是我们在JSP中定义的 "videoIframe"
+        // 获取textarea的内容，参数名是我们在JSP中定义的 "videoIframe"
         String iframeCode = request.getParameter("videoIframe");
         String thumbnailUrl = request.getParameter("thumbnailUrl");
         String status = request.getParameter("status");
 
-        // 2. 【修复】从iframe代码中提取src链接
+        // 2. 从iframe代码中提取src链接
         String videoUrl = extractSrcFromIframe(iframeCode);
         if (videoUrl == null || videoUrl.isEmpty()) {
             request.setAttribute("errorMessage", "无法从嵌入代码中找到有效的视频URL，请检查代码是否正确。");
@@ -81,10 +79,8 @@ public class AddVideoServlet extends HttpServlet {
         boolean success = videoDAO.addVideo(newVideo);
 
         if (success) {
-            // 【修复】如果成功，重定向到后台的管理列表页
             response.sendRedirect(request.getContextPath() + "/admin/videos/manage");
         } else {
-            // 如果失败，返回到添加页面并显示错误消息
             request.setAttribute("errorMessage", "添加视频失败，请检查您的输入并重试。");
             request.getRequestDispatcher("/admin/add_video.jsp").forward(request, response);
         }

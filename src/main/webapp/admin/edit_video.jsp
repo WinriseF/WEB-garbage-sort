@@ -36,7 +36,6 @@
         </div>
         <div class="form-group">
             <label for="videoIframe">B站嵌入代码 (*)</label>
-            <%-- 关键修改：用textarea显示，并用完整的iframe标签填充它 --%>
             <textarea id="videoIframe" name="videoIframe" required><iframe src="${video.videoUrl}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe></textarea>
         </div>
         <div class="form-group">

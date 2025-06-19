@@ -10,9 +10,8 @@ import java.net.URLEncoder;
 
 @WebServlet("/downloadAvatar")
 public class DownloadAvatarServlet extends HttpServlet {
-    // 与 RegisterServlet/UpdateAvatarServlet 中一致的头像存储目录的“根”部分
     // 用于安全校验，确保下载请求只针对头像目录下的文件
-    private static final String AVATAR_BASE_DIR_NAME = "uploads"; // 或者更具体的 "uploads/avatars"
+    private static final String AVATAR_BASE_DIR_NAME = "uploads";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,8 +22,7 @@ public class DownloadAvatarServlet extends HttpServlet {
             return;
         }
 
-        // 安全性校验：防止路径遍历攻击
-        // 确保路径以预期的头像目录开头，并且不包含 ".."
+        // 安全性校验
         avatarRelativePath = avatarRelativePath.replace(File.separator, "/"); // 规范化路径
         if (!avatarRelativePath.startsWith(AVATAR_BASE_DIR_NAME + "/") || avatarRelativePath.contains("..")) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "禁止访问的路径。");
@@ -44,13 +42,12 @@ public class DownloadAvatarServlet extends HttpServlet {
         // 设置响应头
         String mimeType = getServletContext().getMimeType(avatarFile.getName());
         if (mimeType == null) {
-            mimeType = "application/octet-stream"; // 默认MIME类型
+            mimeType = "application/octet-stream";
         }
         response.setContentType(mimeType);
         response.setContentLengthLong(avatarFile.length());
 
         String fileName = avatarFile.getName();
-        // 处理文件名中的非ASCII字符，使其在下载对话框中正确显示
         String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + encodedFileName);
 
@@ -64,9 +61,8 @@ public class DownloadAvatarServlet extends HttpServlet {
                 out.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            // 捕获IO异常，可能因为客户端提前关闭连接等
+            // 捕获IO异常
             System.err.println("DownloadAvatarServlet: 下载文件时发生IO错误: " + e.getMessage());
-            // 此时可能已发送部分响应头，不宜再调用 response.sendError
         }
     }
 }

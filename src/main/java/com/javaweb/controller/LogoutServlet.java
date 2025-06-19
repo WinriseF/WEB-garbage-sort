@@ -1,4 +1,4 @@
-package com.javaweb.controller; // 替换为你的包名
+package com.javaweb.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false); // false表示不创建新session
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate(); // 使会话失效
         }
@@ -22,6 +22,6 @@ public class LogoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp); // POST请求也执行GET逻辑
+        doGet(req, resp);
     }
 }

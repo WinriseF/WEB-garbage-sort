@@ -26,7 +26,7 @@
 
     <form action="${pageContext.request.contextPath}/admin/users/edit" method="post">
 
-        <%-- 隐藏字段，用于在提交表单时传递用户ID --%>
+        <%-- 用于在提交表单时传递用户ID --%>
         <input type="hidden" name="userId" value="${userToEdit.userId}">
 
         <div class="form-group">

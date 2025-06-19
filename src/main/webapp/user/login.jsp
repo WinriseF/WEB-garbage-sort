@@ -67,7 +67,6 @@
             });
         }
 
-        // 如果登录失败，自动聚焦到第一个错误字段或验证码字段
         <c:if test="${not empty requestScope.errorMessage}">
         var captchaInput = document.getElementById('captcha');
         var usernameInput = document.getElementById('username');

@@ -51,7 +51,6 @@
                 <td class="action-links">
                     <a href="${pageContext.request.contextPath}/admin/users/edit?id=${user.userId}" class="edit">编辑</a>
 
-                        <%-- 关键修改在这里：href指向了我们的删除Servlet --%>
                     <a href="${pageContext.request.contextPath}/admin/users/delete?id=${user.userId}" class="delete" onclick="return confirm('警告：确定要永久删除用户“<c:out value="${user.username}"/>”吗？此操作无法撤销！');">删除</a>
                 </td>
             </tr>
