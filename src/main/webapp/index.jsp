@@ -48,8 +48,8 @@
     <a href="${pageContext.request.contextPath}/videos">教育视频</a>
     <a href="${pageContext.request.contextPath}/articles">知识学习</a>
     <a href="${pageContext.request.contextPath}/games/game.jsp">分类游戏</a>
-    <a href="${pageContext.request.contextPath}/reports/new">随手拍</a>
-   <%-- <a href="${pageContext.request.contextPath}/recycling">旧物回收</a>--%>
+    <a href="${pageContext.request.contextPath}/reports/report_form.jsp">随手拍</a>
+    <a href="${pageContext.request.contextPath}/recycling">旧物利用</a>
 
     <%-- 管理后台入口 --%>
     <c:if test="${sessionScope.loggedInUser.role == 'admin'}">

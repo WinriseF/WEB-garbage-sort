@@ -50,6 +50,13 @@
             <a href="${pageContext.request.contextPath}/admin/stats" class="card-link">查看统计</a>
         </div>
 
+        <!-- “随手拍”管理卡片 -->
+        <div class="dashboard-card">
+            <h3>“随手拍”管理</h3>
+            <p>审核,处理提交的环境问题。</p>
+            <%-- 【关键修改】: 下面的链接指向我们刚刚创建的 ManageReportsServlet --%>
+            <a href="${pageContext.request.contextPath}/admin/reports/manage" class="card-link">处理上报</a>
+        </div>
     </div>
 </div>
 </body>
