@@ -33,7 +33,7 @@
             <h3>内容管理</h3>
             <p>管理视频、文章等教育内容。</p>
             <a href="${pageContext.request.contextPath}/admin/videos/manage" class="card-link">管理视频</a>
-            <%-- <a href="#" class="card-link">管理文章</a> --%>
+            <a href="${pageContext.request.contextPath}/admin/articles/manage" class="card-link" style="margin-top: 10px;">管理文章</a>
         </div>
 
         <!-- 用户管理卡片 -->
