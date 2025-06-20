@@ -161,10 +161,7 @@ function drop(event) {
     const isDifficult = draggedItem.dataset.difficult === 'true';
 
     if (itemType === binType) {
-        // 分类正确
-        // --- 潜在修改点: 可以根据难度加不同分数 ---
-        // score += isDifficult ? 2 : 1; // 例如：困难+2分，简单+1分
-        score++; // 当前逻辑：无论难度都+1分
+        score+=5;
         updateScore();
         showFeedback(targetBin, 'correct');
         draggedItem.remove(); // 移除正确的项
@@ -172,7 +169,7 @@ function drop(event) {
         checkGameCompletion();
     } else {
         // 分类错误
-        score--; // 扣分
+        score-=2; // 扣分
         if (score < 0) {
             score = 0; // 确保分数不低于 0
         }
@@ -180,7 +177,6 @@ function drop(event) {
         showFeedback(targetBin, 'incorrect');
         // 错误的项不移除
     }
-    // 注意：不要在这里将 draggedItem 设为 null，因为如果分类错误，元素还在
 }
 
 
