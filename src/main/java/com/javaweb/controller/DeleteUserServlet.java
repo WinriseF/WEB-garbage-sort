@@ -1,5 +1,5 @@
 package com.javaweb.controller;
-
+//管理员删除用户逻辑
 import com.javaweb.dao.UserDAO;
 import com.javaweb.model.User;
 

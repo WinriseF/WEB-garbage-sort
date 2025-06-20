@@ -43,7 +43,7 @@ public class EnvironmentalReportDAO {
     }
 
     /**
-     * 【为后台管理新增】查询所有上报记录（无论状态）。
+     * 查询所有上报记录（无论状态）。
      * @return 包含所有上报记录的列表。
      */
     public List<EnvironmentalReport> findAllReports() {
@@ -82,7 +82,7 @@ public class EnvironmentalReportDAO {
     }
 
     /**
-     * 【为历史记录新增】根据用户ID查询其所有提交历史。
+     * 根据用户ID查询其所有提交历史。
      * @param userId 要查询的用户ID。
      * @return 该用户的所有上报列表。
      */
@@ -104,7 +104,7 @@ public class EnvironmentalReportDAO {
     }
 
     /**
-     * 【为后台处理新增】根据ID查询单个上报的完整信息。
+     * 根据ID查询单个上报的完整信息。
      */
     public EnvironmentalReport findReportById(int reportId) {
         EnvironmentalReport report = null;
@@ -123,7 +123,7 @@ public class EnvironmentalReportDAO {
     }
 
     /**
-     * 【为后台处理新增】更新上报的状态和管理员备注。
+     * 更新上报的状态和管理员备注。
      */
     public boolean updateReportStatus(int reportId, String newStatus, String adminNotes) {
         String sql = "UPDATE EnvironmentalReports SET status = ?, admin_notes = ? WHERE report_id = ?";
@@ -151,10 +151,6 @@ public class EnvironmentalReportDAO {
         report.setReportedAt(rs.getTimestamp("reported_at"));
         report.setStatus(rs.getString("status"));
         report.setAdminNotes(rs.getString("admin_notes"));
-        // 如果数据库有is_anonymous字段，也应该在这里映射
-        // if(rs.getMetaData().getColumnCount() > 8) { // A simple check if the column exists
-        //     report.setAnonymous(rs.getBoolean("is_anonymous"));
-        // }
         return report;
     }
 }

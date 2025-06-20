@@ -9,7 +9,7 @@ import java.util.List;
 public class ArticleDAO {
 
     /**
-     * 【新增】获取所有文章（无论状态），用于后台管理列表。
+     * 获取所有文章（无论状态），用于后台管理列表。
      * @return 包含所有文章的列表。
      */
     public List<Article> findAllArticles() {
@@ -50,12 +50,9 @@ public class ArticleDAO {
 
                 String rawContent = rs.getString("content_html");
 
-                // 【关键修改】: 使用更强大的正则表达式进行深度清洁
-                // 第一步: 移除 <script> 和 <style> 标签块
+                // 使用更强大的正则表达式进行深度清洁
                 String noScriptsOrStyles = rawContent.replaceAll("(?is)<(script|style).*?>.*?</\\1>", "");
-                // 第二步: 移除所有剩余的HTML标签
                 String plainTextContent = noScriptsOrStyles.replaceAll("<[^>]*>", "");
-                // 第三步: 替换HTML实体并整理空白
                 plainTextContent = plainTextContent.replaceAll("&nbsp;", " ").trim();
 
                 // 生成摘要
@@ -123,7 +120,7 @@ public class ArticleDAO {
     }
 
     /**
-     * 【新增】根据ID删除一篇文章。
+     * 根据ID删除一篇文章。
      */
     public boolean deleteArticleById(int articleId) {
         String sql = "DELETE FROM knowledgearticles WHERE article_id = ?";
@@ -137,7 +134,7 @@ public class ArticleDAO {
         }
     }
     /**
-     * 【新增】更新一篇已存在的文章。
+     * 更新一篇已存在的文章。
      * @param article 包含更新后信息的 Article 对象。
      * @return 如果更新成功，返回 true；否则返回 false。
      */
@@ -155,7 +152,7 @@ public class ArticleDAO {
             return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace(); // 在生产环境中应使用日志框架
+            e.printStackTrace();
             return false;
         }
     }

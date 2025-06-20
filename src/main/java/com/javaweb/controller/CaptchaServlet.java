@@ -108,7 +108,7 @@ public class CaptchaServlet extends HttpServlet {
         for (char c : question.toCharArray()) {
             totalTextWidth += fm.charWidth(c) + charSpacing;
         }
-        totalTextWidth -= charSpacing; // 最后一个字符后面没有间距
+        totalTextWidth -= charSpacing;
 
         int currentX = (WIDTH - totalTextWidth) / 2;
         // 调整基线y，为上下浮动和旋转留出空间

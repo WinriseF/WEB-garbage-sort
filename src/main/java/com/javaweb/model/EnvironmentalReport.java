@@ -2,22 +2,17 @@ package com.javaweb.model;
 
 import java.util.Date;
 
-/**
- * Model class for Environmental Reports, mapping to the 'EnvironmentalReports' table.
- */
 public class EnvironmentalReport {
 
     private int reportId;
     private int userId;
     private String reportType;
     private String description;
-    private String photoUrls; // Storing photo URLs as a JSON string or comma-separated
+    private String photoUrls;
     private String addressText;
     private Date reportedAt;
     private String status;
     private String adminNotes;
-
-    // --- Getters and Setters ---
 
     public int getReportId() {
         return reportId;

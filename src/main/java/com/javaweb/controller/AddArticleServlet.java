@@ -23,7 +23,6 @@ public class AddArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // GET 方法保持不变
         if (!isAuthorized(request)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "您没有权限访问此页面");
             return;
@@ -44,7 +43,7 @@ public class AddArticleServlet extends HttpServlet {
         String title = request.getParameter("title");
         String contentHtml = request.getParameter("contentHtml");
 
-        // 【关键修改】从Session中获取当前登录的用户
+        // 从Session中获取当前登录的用户
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("loggedInUser");
 

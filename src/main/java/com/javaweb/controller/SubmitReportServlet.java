@@ -37,20 +37,17 @@ public class SubmitReportServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User currentUser = (session != null) ? (User) session.getAttribute("loggedInUser") : null;
 
-        // 【关键修改】: 在处理任何数据前，首先检查用户是否登录
+        // 在处理任何数据前，首先检查用户是否登录
         if (currentUser == null) {
             // 如果未登录，设置一个明确的错误消息
             request.setAttribute("errorMessage", "您需要先登录才能提交上报！");
-
             // 为了用户体验，将用户已经填写的数据存回去，这样他们登录后不用重新填写
             request.setAttribute("reportType", request.getParameter("reportType"));
             request.setAttribute("description", request.getParameter("description"));
             request.setAttribute("addressText", request.getParameter("addressText"));
-
             // 将请求转发回表单页面，而不是重定向，这样才能传递错误消息和已填数据
             request.getRequestDispatcher("/reports/report_form.jsp").forward(request, response);
-
-            return; // 结束方法，不再继续执行下面的逻辑
+            return;
         }
 
         // --- 只有已登录用户才会执行下面的代码 ---

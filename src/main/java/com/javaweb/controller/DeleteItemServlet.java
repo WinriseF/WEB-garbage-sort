@@ -1,5 +1,5 @@
 package com.javaweb.controller;
-
+//旧物回收删除逻辑
 import com.javaweb.dao.RecyclingDAO;
 import com.javaweb.model.RecyclingItem;
 import com.javaweb.model.User;
@@ -33,7 +33,7 @@ public class DeleteItemServlet extends HttpServlet {
         try {
             int itemId = Integer.parseInt(request.getParameter("id"));
 
-            // 【关键安全检查】: 验证当前用户是否是该物品的所有者
+            // 【安全检查】: 验证当前用户是否是该物品的所有者
             RecyclingItem itemToDelete = recyclingDAO.findItemById(itemId);
             if (itemToDelete != null && itemToDelete.getUserId() == user.getUserId()) {
                 // 验证通过，执行删除

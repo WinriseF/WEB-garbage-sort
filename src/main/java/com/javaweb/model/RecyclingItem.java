@@ -2,9 +2,7 @@ package com.javaweb.model;
 
 import java.util.Date;
 
-/**
- * Model class for a recycling/swap item.
- */
+
 public class RecyclingItem {
 
     private int itemId;
@@ -17,7 +15,6 @@ public class RecyclingItem {
     private String status;
     private Date postedAt;
 
-    // --- Getters and Setters ---
 
     public int getItemId() { return itemId; }
     public void setItemId(int itemId) { this.itemId = itemId; }

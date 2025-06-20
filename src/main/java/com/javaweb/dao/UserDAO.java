@@ -105,7 +105,7 @@ public class UserDAO {
                     user.setRegistrationDate(rs.getTimestamp("registration_date"));
                     user.setLastLoginDate(rs.getTimestamp("last_login_date"));
                     user.setActive(rs.getBoolean("is_active"));
-                    // --- 新增: 读取并设置 current_avatar_path ---
+                    // --- 读取并设置 current_avatar_path ---
                     user.setCurrentAvatarPath(rs.getString("current_avatar_path"));
                 }
             }

@@ -1,6 +1,5 @@
 package com.javaweb.controller;
 
-// 【关键修复】: 添加下面这些，引入我们需要的DAO和Model类
 import com.javaweb.dao.EnvironmentalReportDAO;
 import com.javaweb.model.EnvironmentalReport;
 import com.javaweb.model.User;

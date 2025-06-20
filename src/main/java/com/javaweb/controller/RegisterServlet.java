@@ -158,6 +158,7 @@ public class RegisterServlet extends HttpServlet {
                 }
             }
             //头像处理部分结束
+            //密码加密部分
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             User newUser = new User();
             newUser.setUsername(username);

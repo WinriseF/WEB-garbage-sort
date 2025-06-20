@@ -1,5 +1,5 @@
 package com.javaweb.controller;
-
+//视频播放相关
 import com.javaweb.dao.VideoDAO;
 import com.javaweb.model.Video;
 import javax.servlet.ServletException;

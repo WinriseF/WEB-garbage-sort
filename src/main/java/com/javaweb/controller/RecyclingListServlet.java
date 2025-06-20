@@ -28,7 +28,7 @@ public class RecyclingListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // 1. 【关键】调用DAO的 findAllAvailableItems() 方法。
+        // 1. 调用DAO的 findAllAvailableItems() 方法。
         //    这个方法会执行SQL查询 "SELECT * FROM RecyclingItems WHERE status = 'available' ..."
         //    确保了我们只获取那些可以被展示的物品。
         List<RecyclingItem> itemList = recyclingDAO.findAllAvailableItems();

@@ -93,7 +93,7 @@ public class LoginServlet extends HttpServlet {
             // 重定向到首页或其他受保护的页面
             // 可以根据用户角色重定向到不同页面
             if ("admin".equals(user.getRole()) || "editor".equals(user.getRole())) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp"); // 假设有后台管理页面
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
             } else {
                 response.sendRedirect(request.getContextPath() + "/index.jsp"); // 普通用户首页
             }

@@ -9,7 +9,7 @@ import java.util.List;
 public class VideoDAO {
 
     /**
-     * 查询所有视频（无论状态），用于后台管理列表。
+     * 查询所有视频，用于后台管理列表。
      * @return 包含所有 Video 对象的列表。
      */
     public List<Video> findAll() {

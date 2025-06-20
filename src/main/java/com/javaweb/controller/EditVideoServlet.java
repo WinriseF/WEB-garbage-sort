@@ -109,7 +109,7 @@ public class EditVideoServlet extends HttpServlet {
         return null;
     }
 
-    // 辅助方法，用于检查用户权限
+    // 用于检查用户权限
     private boolean isAuthorized(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedInUser") == null) {

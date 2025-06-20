@@ -21,7 +21,6 @@ public class Video {
     private String suitableAgeGroups;
     private Integer primaryCategoryId;
 
-    // 默认构造函数
     public Video() {}
 
 

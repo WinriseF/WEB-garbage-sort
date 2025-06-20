@@ -138,7 +138,6 @@ public class UpdateAvatarServlet extends HttpServlet {
         if (errorMessage != null) {
             request.setAttribute("errorMessage", errorMessage);
         }
-        // 不论成功失败，都转发回profile页面，让用户看到结果
         request.getRequestDispatcher("/user/profile.jsp").forward(request, response);
     }
 }

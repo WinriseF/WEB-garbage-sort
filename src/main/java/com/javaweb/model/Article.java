@@ -9,7 +9,6 @@ public class Article {
     private String summary;
     private Date publishDate;
     private int viewsCount;
-    // 【新增】下面这两个字段，使其与数据库表结构更匹配
     private int authorId;
     private String status;
 
@@ -28,7 +27,7 @@ public class Article {
     public int getViewsCount() { return viewsCount; }
     public void setViewsCount(int viewsCount) { this.viewsCount = viewsCount; }
 
-    // 【新增】新字段的 Getter 和 Setter
+    // 新字段的 Getter 和 Setter
     public int getAuthorId() { return authorId; }
     public void setAuthorId(int authorId) { this.authorId = authorId; }
     public String getStatus() { return status; }

@@ -43,12 +43,12 @@ public class AddVideoServlet extends HttpServlet {
             return;
         }
 
-        request.setCharacterEncoding("UTF-8"); // 处理中文字符
+        request.setCharacterEncoding("UTF-8");
 
         // 1. 从表单获取数据
         String title = request.getParameter("title");
         String description = request.getParameter("description");
-        // 获取textarea的内容，参数名是我们在JSP中定义的 "videoIframe"
+        // 获取textarea的内容，参数名是JSP中定义的 "videoIframe"
         String iframeCode = request.getParameter("videoIframe");
         String thumbnailUrl = request.getParameter("thumbnailUrl");
         String status = request.getParameter("status");

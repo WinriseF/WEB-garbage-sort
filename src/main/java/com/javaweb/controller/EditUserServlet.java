@@ -82,7 +82,7 @@ public class EditUserServlet extends HttpServlet {
         }
     }
 
-    // 辅助方法，用于检查用户是否是管理员
+    // 检查用户是否是管理员
     private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedInUser") == null) {

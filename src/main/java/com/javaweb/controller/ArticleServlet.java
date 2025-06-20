@@ -27,9 +27,7 @@ public class ArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 获取请求中的action参数，用于判断用户意图
         String action = request.getParameter("action");
-
         // 如果action为空或为"list"，则显示文章列表
         if (action == null || action.equals("list")) {
             listArticles(request, response);
@@ -47,7 +45,7 @@ public class ArticleServlet extends HttpServlet {
      */
     private void listArticles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Article> articleList = articleDAO.getAllPublishedArticles();
-        request.setAttribute("articleList", articleList); // 将文章列表存入request作用域
+        request.setAttribute("articleList", articleList);
         // 转发到JSP页面进行渲染
         request.getRequestDispatcher("/knowledge/articleList.jsp").forward(request, response);
     }

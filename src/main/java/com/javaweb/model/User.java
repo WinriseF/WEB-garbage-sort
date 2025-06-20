@@ -9,13 +9,13 @@ public class User {
     private String passwordHash; // 存储哈希后的密码
     private String email;
     private String nickname;
-    private String ageGroup; // 对应数据库 ENUM('child', 'teenager', 'adult', 'senior')
+    private String ageGroup;
     private Integer regionId; // 可以为 null
-    private String role;     // 对应数据库 ENUM('user', 'admin', 'editor')
+    private String role;
     private Timestamp registrationDate;
     private Timestamp lastLoginDate;
     private boolean isActive; // 对应数据库 TINYINT(1)
-    private String currentAvatarPath; // 可选字段，存储当前头像的 URL
+    private String currentAvatarPath;
 
     // 构造函数
     public User() {
@@ -33,7 +33,6 @@ public class User {
     }
 
 
-    // Getter 和 Setter 方法 (为所有字段生成)
     public int getUserId() {
         return userId;
     }
