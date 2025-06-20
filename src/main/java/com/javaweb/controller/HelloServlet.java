@@ -1,5 +1,12 @@
+/**
+ * @author Winrisef
+ * @see <a href="https://github.com/WinriseF">https://github.com/WinriseF</a>
+ * date 2025/6/20
+ * description:
+ */
+
 package com.javaweb.controller;
-//测试数据库文件
+//测试数据库连接文件
 import com.javaweb.util.DBUtil;
 
 import javax.servlet.ServletException;

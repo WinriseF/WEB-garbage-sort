@@ -1,4 +1,11 @@
-package com.javaweb.util; // 根据你的包名修改
+/**
+ * @author Winrisef
+ * @see <a href="https://github.com/WinriseF">https://github.com/WinriseF</a>
+ * date 2025/6/20
+ * description:
+ */
+
+package com.javaweb.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

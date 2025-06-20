@@ -1,3 +1,10 @@
+/**
+ * @author Winrisef
+ * @see <a href="https://github.com/WinriseF">https://github.com/WinriseF</a>
+ * date 2025/6/20
+ * description:
+ */
+
 package com.javaweb.model;
 
 import java.util.Date;

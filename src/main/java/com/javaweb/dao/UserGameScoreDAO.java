@@ -1,4 +1,11 @@
-package com.javaweb.dao; // 或你的包名
+/**
+ * @author Winrisef
+ * @see <a href="https://github.com/WinriseF">https://github.com/WinriseF</a>
+ * date 2025/6/20
+ * description:
+ */
+
+package com.javaweb.dao;
 
 import com.javaweb.model.UserGameScoreEntry; // 需要创建一个简单的POJO来封装排行榜条目
 import com.javaweb.util.DBUtil;
